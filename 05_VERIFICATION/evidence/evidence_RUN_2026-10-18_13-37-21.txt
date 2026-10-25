@@ -1,0 +1,118 @@
+
+==================== 0. THONG TIN TAI LAP ====================
+Ngay chay script : 2026-10-25 11:07 +0000
+Thu muc H03      : /home/crown/H03_local
+Git              : (thu muc nay KHONG phai git repo)
+RUN              : RUN_2026-10-18_13-37-21
+LibreLane        : 3.0.16
+PDK              : sky130A  (PDK_ROOT: /home/crown/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71)
+Thu vien cell    : sky130_fd_sc_hd
+CLOCK_PERIOD     : 10 ns (gia dinh phan tich)
+SDC              : create_clock -name clk -period 10.0 [get_ports clk];set_input_delay  1.0 -clock clk [get_ports {miso rst_n start tx_data}];set_output_delay 1.0 -clock clk [all_outputs];
+Icarus           : Icarus Verilog version 13.0 (devel) ()
+SHA-256 RTL      : 1b352c9de67b27ac…
+SHA-256 nl synth : 449fbac45fa35ca8…
+SHA-256 nl final : 580318a1fe1a8c4e…
+SHA-256 DEF final: 45a186e5e25a56c7…
+
+==================== 1. RTL REGRESSION (lenh: bash 05_VERIFICATION/regression/run_regression.sh) ====================
+Icarus: Icarus Verilog version 13.0 (devel) ()
+HC=1: ALL H03 TESTS PASS (HC=1, 116 checks)
+HC=2: ALL H03 TESTS PASS (HC=2, 116 checks)
+HC=4: ALL H03 TESTS PASS (HC=4, 116 checks)
+SUMMARY,HC=1,checks=116,errors=0,setup_min_tat_ca_ca=10.0 ns
+SUMMARY,HC=2,checks=116,errors=0,setup_min_tat_ca_ca=20.0 ns
+SUMMARY,HC=4,checks=116,errors=0,setup_min_tat_ca_ca=40.0 ns
+
+==================== 2. GATE-LEVEL SIMULATION (lenh: CELL_LIB=... bash 05_VERIFICATION/regression/run_gls.sh RUN) ====================
+RUN   : RUN_2026-10-18_13-37-21
+[synth  ]  130 instance, 37 flip-flop | ALL H03 TESTS PASS (HC=4, 116 checks)
+[postpnr]  764 instance, 37 flip-flop | ALL H03 TESTS PASS (HC=4, 116 checks)
+
+==================== 3. TONG HOP (06-yosys-synthesis/reports/stat.rpt) ====================
+      130 1.62E+03 cells
+       37  787.005   sky130_fd_sc_hd__dfxtp_2
+  mapping auto encoding to `one-hot` for this FSM.
+
+==================== 4. STA SAU DINH TUYEN (55-openroad-stapostpnr/summary.rpt) ====================
+┃ Corner/Group         ┃ Slack    ┃ Paths    ┃ Hold TNS ┃ Count    ┃ reg       ┃ Slack    ┃ Reg Paths ┃ TNS      ┃ Count
+│ Overall              │ 0.2767   │ 0.2767   │ 0.0000   │ 0        │ 0         │ 4.9322   │ 4.9322    │ 0.0000   │ 0    
+│ nom_tt_025C_1v80     │ 0.4468   │ 0.4468   │ 0.0000   │ 0        │ 0         │ 7.2736   │ 8.0990    │ 0.0000   │ 0    
+│ nom_ss_100C_1v60     │ 0.9402   │ 0.9402   │ 0.0000   │ 0        │ 0         │ 4.9642   │ 4.9642    │ 0.0000   │ 0    
+│ nom_ff_n40C_1v95     │ 0.2775   │ 0.2775   │ 0.0000   │ 0        │ 0         │ 7.9968   │ N/A       │ 0.0000   │ 0    
+│ min_tt_025C_1v80     │ 0.4456   │ 0.4456   │ 0.0000   │ 0        │ 0         │ 7.2841   │ 8.1127    │ 0.0000   │ 0    
+│ min_ss_100C_1v60     │ 0.9378   │ 0.9378   │ 0.0000   │ 0        │ 0         │ 5.0003   │ 5.0003    │ 0.0000   │ 0    
+│ min_ff_n40C_1v95     │ 0.2767   │ 0.2767   │ 0.0000   │ 0        │ 0         │ 8.0029   │ N/A       │ 0.0000   │ 0    
+│ max_tt_025C_1v80     │ 0.4476   │ 0.4476   │ 0.0000   │ 0        │ 0         │ 7.2640   │ 8.0866    │ 0.0000   │ 0    
+│ max_ss_100C_1v60     │ 0.9416   │ 0.9416   │ 0.0000   │ 0        │ 0         │ 4.9322   │ 4.9322    │ 0.0000   │ 0    
+│ max_ff_n40C_1v95     │ 0.2782   │ 0.2782   │ 0.0000   │ 0        │ 0         │ 7.9913   │ N/A       │ 0.0000   │ 0    
+metrics: setup WS = 4.9321823576896655 ns | hold WS = 0.27669825547320537 ns | setup vio = 0 | hold vio = 0
+
+==================== 5. DUONG TOI HAN SETUP (max_ss_100C_1v60/max.rpt, duong dau tien) ====================
+Startpoint: _222_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _207_ (rising edge-triggered flip-flop clocked by clk)
+     4    0.039742    0.094074    0.218526    0.219157 ^ clkbuf_0_clk/X (sky130_fd_sc_hd__clkbuf_16)
+     8    0.031908    0.083143    0.248882    0.470328 ^ clkbuf_2_0__f_clk/X (sky130_fd_sc_hd__clkbuf_16)
+    24    0.098853    0.420757    0.913219    1.384927 v _222_/Q (sky130_fd_sc_hd__dfxtp_2)
+                                                         state[2] (net)
+     3    0.009697    0.099231    0.621086    2.009366 v _168_/X (sky130_fd_sc_hd__and2b_2)
+                                                         _089_ (net)
+     9    0.028202    0.368284    1.798661    3.808748 v _175_/X (sky130_fd_sc_hd__or4_2)
+                                                         _038_ (net)
+     1    0.004162    0.171002    1.171269    4.981582 v _126_/X (sky130_fd_sc_hd__or3_2)
+                                                         _061_ (net)
+     1    0.003433    0.072135    0.288896    5.270751 v _127_/X (sky130_fd_sc_hd__o211a_2)
+                                                         _024_ (net)
+                      0.072613    0.000217    5.270968 v _207_/D (sky130_fd_sc_hd__dfxtp_2)
+                                              5.270968   data arrival time
+     4    0.039742    0.094074    0.218526   10.219156 ^ clkbuf_0_clk/X (sky130_fd_sc_hd__clkbuf_16)
+     9    0.033809    0.085733    0.251820   10.473199 ^ clkbuf_2_1__f_clk/X (sky130_fd_sc_hd__clkbuf_16)
+                                 -0.271207   10.203151   library setup time
+                                             10.203151   data required time
+                                             10.203151   data required time
+                                             -5.270968   data arrival time
+                                              4.932182   slack (MET)
+
+==================== 5b. DUONG TOI HAN HOLD (min_ff_n40C_1v95/min.rpt) ====================
+Startpoint: _188_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _188_ (rising edge-triggered flip-flop clocked by clk)
+     4    0.038636    0.044107    0.087857    0.088057 ^ clkbuf_0_clk/X (sky130_fd_sc_hd__clkbuf_16)
+     8    0.031796    0.039522    0.096343    0.184902 ^ clkbuf_2_0__f_clk/X (sky130_fd_sc_hd__clkbuf_16)
+     2    0.005836    0.031194    0.198431    0.383689 ^ _188_/Q (sky130_fd_sc_hd__dfxtp_2)
+     1    0.002140    0.016583    0.062118    0.445860 ^ _183_/X (sky130_fd_sc_hd__a21o_2)
+                      0.016583    0.000019    0.445879 ^ _188_/D (sky130_fd_sc_hd__dfxtp_2)
+     4    0.038636    0.044107    0.087857    0.088057 ^ clkbuf_0_clk/X (sky130_fd_sc_hd__clkbuf_16)
+     8    0.031796    0.039522    0.096343    0.184902 ^ clkbuf_2_0__f_clk/X (sky130_fd_sc_hd__clkbuf_16)
+                                              0.276698   slack (MET)
+Ten FF trong netlist final:
+  _222_ -> .Q(\state[2] )
+  _207_ -> .Q(\tx_shift[2] )
+  _188_ -> .Q(net13)
+
+==================== 6. CTS (35-openroad-cts/openroad-cts.log) + SKEW ====================
+[INFO CTS-0018]     Created 5 clock buffers.
+[INFO CTS-0012]     Minimum number of buffers in the clock path: 2.
+[INFO CTS-0013]     Maximum number of buffers in the clock path: 2.
+[INFO CTS-0207]  Dummy loads inserted 3
+clock_buffer = 5 | clock_inverter = 3
+skew worst setup = -0.004017841728599534 ns | skew worst hold = -0.002152361683138121 ns
+
+==================== 7. CONG SUAT UOC LUONG (nom_tt_025C_1v80/power.rpt; hoat dong mac dinh cua OpenSTA) ====================
+Sequential           1.576896e-04 8.582179e-06 3.168516e-10 1.662721e-04  44.0%
+Combinational        2.304723e-05 1.433807e-05 4.259477e-10 3.738574e-05   9.9%
+Clock                1.177384e-04 5.683076e-05 1.531555e-09 1.745707e-04  46.2%
+Total                2.984751e-04 7.975102e-05 2.274355e-09 3.782284e-04 100.0%
+
+==================== 8. VAT LY (RUN_2026-10-18_13-37-21/final/metrics.json) ====================
+instance tong = 764 | stdcell = 213
+  sequential_cell                  37
+  multi_input_combinational_cell   90
+  inverter                         3
+  timing_repair_buffer             25
+  clock_buffer                     5
+  clock_inverter                   3
+  tap_cell                         50
+  fill_cell                        551
+core area = 3971.31 um^2 | utilization = 0.529301
+DRC magic = 0 | DRC klayout = 0 | LVS error = 0 | antenna nets = 0
+-rw-r--r-- 1 crown crown 534848 Oct 18 13:38 /home/crown/H03_local/04_IMPLEMENTATION/scripts/runs/RUN_2026-10-18_13-37-21/final/gds/h03_spi_master.gds
