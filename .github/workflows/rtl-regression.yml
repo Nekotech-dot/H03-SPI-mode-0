@@ -1,0 +1,32 @@
+name: H03 RTL Regression
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  rtl-regression:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+          iverilog -V | head -1
+
+      - name: Run H03 RTL regression
+        run: |
+          chmod +x 05_VERIFICATION/regression/run_regression.sh
+          bash 05_VERIFICATION/regression/run_regression.sh
+
+      - name: Show regression results
+        if: always()
+        run: |
+          if [ -f 05_VERIFICATION/regression/logs/results.csv ]; then
+            cat 05_VERIFICATION/regression/logs/results.csv
+          fi
