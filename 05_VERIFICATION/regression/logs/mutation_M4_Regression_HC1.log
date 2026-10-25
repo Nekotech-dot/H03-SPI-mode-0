@@ -1,0 +1,52 @@
+RESULT,HC,case,tx,slave,mosi_thu,rx,rise,fall,t_lead_ns,t_lag_ns,setup_min_ns,ket_qua
+VCD info: dumpfile /tmp/claude-0/-home-claude/29617bf7-8201-5419-9679-0f4f637794bd/scratchpad/h03_teacher/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/logs/tmpuzxw378b/x.vcd opened for output.
+    [FAIL] D_waveform_mau : MOSI: ky vong 0x96, slave thu 0x2c  (t=290000)
+    [FAIL] D_waveform_mau : RX: ky vong 0x3a, DUT thu 0x7X  (t=290000)
+    [FAIL] D_waveform_mau : so suon len trong cua so CS = 9  (t=290000)
+    [FAIL] D_waveform_mau : so suon xuong trong cua so CS = 9  (t=290000)
+RESULT,1,D_waveform_mau,0x96,0x3a,0x2c,0x7X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A1_tx00_rxFF : RX: ky vong 0xff, DUT thu 0xfX  (t=550000)
+    [FAIL] A1_tx00_rxFF : so suon len trong cua so CS = 9  (t=550000)
+    [FAIL] A1_tx00_rxFF : so suon xuong trong cua so CS = 9  (t=550000)
+RESULT,1,A1_tx00_rxFF,0x00,0xff,0x00,0xfX,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A2_txFF_rx00 : MOSI: ky vong 0xff, slave thu 0xfe  (t=810000)
+    [FAIL] A2_txFF_rx00 : RX: ky vong 0x00, DUT thu 0x0X  (t=810000)
+    [FAIL] A2_txFF_rx00 : so suon len trong cua so CS = 9  (t=810000)
+    [FAIL] A2_txFF_rx00 : so suon xuong trong cua so CS = 9  (t=810000)
+RESULT,1,A2_txFF_rx00,0xff,0x00,0xfe,0x0X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A3_txA5_rx3A : MOSI: ky vong 0xa5, slave thu 0x4a  (t=1070000)
+    [FAIL] A3_txA5_rx3A : RX: ky vong 0x3a, DUT thu 0x7X  (t=1070000)
+    [FAIL] A3_txA5_rx3A : so suon len trong cua so CS = 9  (t=1070000)
+    [FAIL] A3_txA5_rx3A : so suon xuong trong cua so CS = 9  (t=1070000)
+RESULT,1,A3_txA5_rx3A,0xa5,0x3a,0x4a,0x7X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A4_txB4_rx3A : MOSI: ky vong 0xb4, slave thu 0x68  (t=1330000)
+    [FAIL] A4_txB4_rx3A : RX: ky vong 0x3a, DUT thu 0x7X  (t=1330000)
+    [FAIL] A4_txB4_rx3A : so suon len trong cua so CS = 9  (t=1330000)
+    [FAIL] A4_txB4_rx3A : so suon xuong trong cua so CS = 9  (t=1330000)
+RESULT,1,A4_txB4_rx3A,0xb4,0x3a,0x68,0x7X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A5_tx01_rx80 : MOSI: ky vong 0x01, slave thu 0x02  (t=1590000)
+    [FAIL] A5_tx01_rx80 : RX: ky vong 0x80, DUT thu 0x0X  (t=1590000)
+    [FAIL] A5_tx01_rx80 : so suon len trong cua so CS = 9  (t=1590000)
+    [FAIL] A5_tx01_rx80 : so suon xuong trong cua so CS = 9  (t=1590000)
+RESULT,1,A5_tx01_rx80,0x01,0x80,0x02,0x0X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] A6_tx80_rx01 : MOSI: ky vong 0x80, slave thu 0x00  (t=1850000)
+    [FAIL] A6_tx80_rx01 : RX: ky vong 0x01, DUT thu 0x0X  (t=1850000)
+    [FAIL] A6_tx80_rx01 : so suon len trong cua so CS = 9  (t=1850000)
+    [FAIL] A6_tx80_rx01 : so suon xuong trong cua so CS = 9  (t=1850000)
+RESULT,1,A6_tx80_rx01,0x80,0x01,0x00,0x0X,9,9,10.0,10.0,10.0,FAIL
+RESULT,1,C1_reset_giua_transaction,0x3a,0xb4,-,0x00,4,4,-,-,-,PASS
+    [FAIL] C1b_sau_reset : MOSI: ky vong 0x3a, slave thu 0x74  (t=2250000)
+    [FAIL] C1b_sau_reset : RX: ky vong 0xb4, DUT thu 0x6X  (t=2250000)
+    [FAIL] C1b_sau_reset : so suon len trong cua so CS = 9  (t=2250000)
+    [FAIL] C1b_sau_reset : so suon xuong trong cua so CS = 9  (t=2250000)
+RESULT,1,C1b_sau_reset,0x3a,0xb4,0x74,0x6X,9,9,10.0,10.0,10.0,FAIL
+    [FAIL] C2_start_giu_muc_1 : transaction 0: slave thu 0x68, DUT thu 0x7X  (t=3140000)
+    [FAIL] C2_start_giu_muc_1 : transaction 1: slave thu 0x68, DUT thu 0x7X  (t=3140000)
+    [FAIL] C2_start_giu_muc_1 : transaction 2: slave thu 0x68, DUT thu 0x7X  (t=3140000)
+    [FAIL] C2_start_giu_muc_1 : chu ky lap = 200.0 ns (dac ta: (16*HC+2) x Tclk = 180.0)  (t=3140000)
+    [FAIL] C2_start_giu_muc_1 : chu ky lap = 200.0 ns (dac ta: (16*HC+2) x Tclk = 180.0)  (t=3140000)
+RESULT,1,C2_start_giu_muc_1,0xb4,0x3a,0x68,0x7X,8,8,-,-,-,FAIL (chu ky lap 200 ns; CS cao giua 2 lan 10 ns)
+INFO,1,C3_fsm_ma_2b11,FSM KET o 2'b11 sau 200 chu ky; START sau do KHONG duoc nhan (khoi chet cho toi khi reset)
+SUMMARY,HC=1,checks=116,errors=36,setup_min_tat_ca_ca=10.0 ns
+FATAL: /tmp/claude-0/-home-claude/29617bf7-8201-5419-9679-0f4f637794bd/scratchpad/h03_teacher/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/h03_spi_master_regression_tb.sv:289: H03 REGRESSION FAIL (HC=1): 36 / 116 checks loi
+       Time: 5440000  Scope: h03_spi_master_regression_tb.$unm_blk_26

@@ -1,0 +1,437 @@
+$date
+	Sun Oct 18 11:07:09 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module h03_spi_master_regression_tb $end
+$var wire 1 ! sclk $end
+$var wire 8 " rx_data [7:0] $end
+$var wire 1 # mosi $end
+$var wire 1 $ done $end
+$var wire 1 % cs_n $end
+$var wire 1 & busy $end
+$var parameter 32 ' HC $end
+$var real 1 ( TCLK $end
+$var real 1 ) T_HOLD_SLAVE $end
+$var reg 1 * clk $end
+$var reg 1 + miso $end
+$var reg 1 , rst_n $end
+$var reg 8 - rx_before [7:0] $end
+$var reg 8 . slave_rx [7:0] $end
+$var reg 8 / slave_tx [7:0] $end
+$var reg 1 0 start $end
+$var reg 8 1 tx_data [7:0] $end
+$var integer 32 2 busy_err [31:0] $end
+$var integer 32 3 done_cycles [31:0] $end
+$var integer 32 4 fall_cnt [31:0] $end
+$var reg 1 5 in_txn $end
+$var integer 32 6 miso_idx [31:0] $end
+$var integer 32 7 mosi_phase_err [31:0] $end
+$var integer 32 8 n_checks [31:0] $end
+$var integer 32 9 n_errors [31:0] $end
+$var integer 32 : rise_cnt [31:0] $end
+$var integer 32 ; rx_early_err [31:0] $end
+$var real 1 < setup_min_all $end
+$var real 1 = setup_min_case $end
+$var real 1 > t_cs_fall $end
+$var real 1 ? t_cs_rise $end
+$var real 1 @ t_first_rise $end
+$var real 1 A t_last_fall $end
+$var real 1 B t_last_rise $end
+$var real 1 C t_mosi_chg $end
+$var real 1 D t_ref $end
+$scope module dut $end
+$var wire 1 * clk $end
+$var wire 1 E half_tick $end
+$var wire 1 + miso $end
+$var wire 1 , rst_n $end
+$var wire 1 0 start $end
+$var wire 8 F tx_data [7:0] $end
+$var parameter 32 G HALF_CYCLES $end
+$var parameter 32 H HCW $end
+$var parameter 1 I MSB_FIRST $end
+$var reg 1 & busy $end
+$var reg 1 % cs_n $end
+$var reg 1 $ done $end
+$var reg 4 J edge_count [3:0] $end
+$var reg 1 K half_count $end
+$var reg 1 # mosi $end
+$var reg 8 L rx_data [7:0] $end
+$var reg 8 M rx_shift [7:0] $end
+$var reg 1 ! sclk $end
+$var reg 2 N state [1:0] $end
+$var reg 8 O tx_shift [7:0] $end
+$upscope $end
+$scope begin $unm_blk_26 $end
+$upscope $end
+$scope task chk $end
+$upscope $end
+$scope task info_fsm_illegal_state $end
+$upscope $end
+$scope task pulse_start $end
+$upscope $end
+$scope task reset_dut $end
+$upscope $end
+$scope task run_case $end
+$upscope $end
+$scope task test_reset_mid_transfer $end
+$upscope $end
+$scope task test_start_held_high $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#50000
+$dumpon
+b0 O
+b0 N
+b0 M
+b0 L
+0K
+b0 J
+b0 F
+1E
+r0 D
+r5 C
+r0 B
+r0 A
+r0 @
+r0 ?
+r0 >
+r0 =
+r1000000000 <
+bx ;
+bx :
+b0 9
+b0 8
+bx 7
+bx 6
+05
+bx 4
+bx 3
+bx 2
+b0 1
+00
+b0 /
+bx .
+bx -
+1,
+0+
+0*
+0&
+1%
+0$
+0#
+b0 "
+0!
+$end
+b0 3
+b111010 /
+#55000
+1*
+#60000
+10
+b10010110 1
+b10010110 F
+0*
+#65000
+r65 C
+b0 -
+b0 ;
+b0 2
+b0 7
+r1000000000 =
+b111 6
+b0 .
+b0 4
+b0 :
+r65 D
+r65 >
+15
+b1 N
+1#
+b10010110 O
+0%
+1&
+1*
+#70000
+00
+0*
+#75000
+b1 .
+r10 =
+r75 B
+r75 @
+b1 :
+b1 J
+1!
+1*
+#76000
+x+
+#80000
+0*
+#85000
+r85 C
+0+
+b110 6
+r85 D
+r85 A
+b1 4
+0#
+b101100 O
+0!
+1*
+#90000
+0*
+#95000
+b10 .
+r95 B
+b10 :
+b10 J
+1!
+1*
+#96000
+x+
+#100000
+0*
+#105000
+1+
+b101 6
+r105 D
+r105 A
+b10 4
+b1011000 O
+0!
+1*
+#110000
+0*
+#115000
+b100 .
+r115 B
+b11 :
+b11 J
+b1 M
+1!
+1*
+#116000
+x+
+#120000
+0*
+#125000
+r125 C
+1+
+b100 6
+r125 D
+r125 A
+b11 4
+1#
+b10110000 O
+0!
+1*
+#130000
+0*
+#135000
+b1001 .
+r135 B
+b100 :
+b100 J
+b11 M
+1!
+1*
+#136000
+x+
+#140000
+0*
+#145000
+r145 C
+1+
+b11 6
+r145 D
+r145 A
+b100 4
+0#
+b1100000 O
+0!
+1*
+#150000
+0*
+#155000
+b10010 .
+r155 B
+b101 :
+b101 J
+b111 M
+1!
+1*
+#156000
+x+
+#160000
+0*
+#165000
+r165 C
+0+
+b10 6
+r165 D
+r165 A
+b101 4
+1#
+b11000000 O
+0!
+1*
+#170000
+0*
+#175000
+b100101 .
+r175 B
+b110 :
+b110 J
+b1110 M
+1!
+1*
+#176000
+x+
+#180000
+0*
+#185000
+1+
+b1 6
+r185 D
+r185 A
+b110 4
+b10000000 O
+0!
+1*
+#190000
+0*
+#195000
+b1001011 .
+r195 B
+b111 :
+b111 J
+b11101 M
+1!
+1*
+#196000
+x+
+#200000
+0*
+#205000
+r205 C
+0+
+b0 6
+r205 D
+r205 A
+b111 4
+0#
+b0 O
+0!
+1*
+#210000
+0*
+#215000
+b10010110 .
+r215 B
+b1000 :
+b1000 J
+b111010 M
+1!
+1*
+#216000
+x+
+#220000
+0*
+#225000
+r225 D
+r225 A
+b1000 4
+b10 N
+0!
+1*
+#230000
+0*
+#235000
+0+
+r235 ?
+05
+b0 N
+1$
+b111010 "
+b111010 L
+0&
+1%
+1*
+#236000
+b1 3
+#240000
+b1 8
+0*
+#245000
+b0 J
+0$
+1*
+#250000
+0*
+#255000
+1*
+#260000
+0*
+#265000
+1*
+#270000
+r10 <
+b1101 8
+0*
+#275000
+1*
+#280000
+0*
+#285000
+1*
+#290000
+$dumpoff
+bx O
+bx N
+bx M
+bx L
+xK
+bx J
+bx F
+xE
+rNaN D
+rNaN C
+rNaN B
+rNaN A
+rNaN @
+rNaN ?
+rNaN >
+rNaN =
+rNaN <
+bx ;
+bx :
+bx 9
+bx 8
+bx 7
+bx 6
+x5
+bx 4
+bx 3
+bx 2
+bx 1
+x0
+bx /
+bx .
+bx -
+x,
+x+
+x*
+x&
+x%
+x$
+x#
+bx "
+x!
+$end
+0*

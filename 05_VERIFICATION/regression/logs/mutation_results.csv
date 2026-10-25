@@ -1,0 +1,11 @@
+Ma,Loi cai vao,TB goc cua thay,TB sua slave,Regression HC=1,Regression HC=2
+M0,RTL goc (khong loi),PASS (khong bat),PASS (khong bat),PASS (khong bat),PASS (khong bat)
+M1,Ghep bit nhan theo LSB-first (sai thu tu bit RX),PASS (khong bat),PASS (khong bat),FAIL (da bat),FAIL (da bat)
+M2,Lay mau MISO o suon XUONG thay vi suon len (rui ro Charter muc 10),PASS (khong bat),PASS (khong bat),FAIL (da bat),FAIL (da bat)
+M3,Doi MOSI o suon LEN thay vi suon xuong,PASS (khong bat),PASS (khong bat),FAIL (da bat),FAIL (da bat)
+M4,Phat 9 xung SCLK thay vi 8,FAIL (da bat),FAIL (da bat),FAIL (da bat),FAIL (da bat)
+M5,Nha CS cung luc voi suon xuong thu 8 (CS khong bao tron),PASS (khong bat),FAIL (da bat),FAIL (da bat),FAIL (da bat)
+M6,Khong dua bit dau len MOSI khi CS xuong (sai CPHA = 0),PASS (khong bat),FAIL (da bat),FAIL (da bat),FAIL (da bat)
+M7,rx_data cap nhat tung bit trong khi dang truyen,PASS (khong bat),PASS (khong bat),FAIL (da bat),FAIL (da bat)
+M8,Bo chia sai 1 (half_tick lech mot chu ky),TREO (khong ket luan),TREO (khong ket luan),PASS (khong bat),FAIL (da bat)
+M9,done khong tu xoa (ket muc 1; khong con la xung),PASS (khong bat),PASS (khong bat),FAIL (da bat),FAIL (da bat)

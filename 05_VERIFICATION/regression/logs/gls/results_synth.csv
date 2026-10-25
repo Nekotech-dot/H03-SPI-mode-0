@@ -1,0 +1,11 @@
+synth,HC,case,tx,slave,mosi_thu,rx,rise,fall,t_lead_ns,t_lag_ns,setup_min_ns,ket_qua
+synth,4,D_waveform_mau,0x96,0x3a,0x96,0x3a,8,8,40.0,10.0,40.0,PASS
+synth,4,A1_tx00_rxFF,0x00,0xff,0x00,0xff,8,8,40.0,10.0,40.0,PASS
+synth,4,A2_txFF_rx00,0xff,0x00,0xff,0x00,8,8,40.0,10.0,40.0,PASS
+synth,4,A3_txA5_rx3A,0xa5,0x3a,0xa5,0x3a,8,8,40.0,10.0,40.0,PASS
+synth,4,A4_txB4_rx3A,0xb4,0x3a,0xb4,0x3a,8,8,40.0,10.0,40.0,PASS
+synth,4,A5_tx01_rx80,0x01,0x80,0x01,0x80,8,8,40.0,10.0,40.0,PASS
+synth,4,A6_tx80_rx01,0x80,0x01,0x80,0x01,8,8,40.0,10.0,40.0,PASS
+synth,4,C1_reset_giua_transaction,0x3a,0xb4,-,0x00,4,3,-,-,-,PASS
+synth,4,C1b_sau_reset,0x3a,0xb4,0x3a,0xb4,8,8,40.0,10.0,40.0,PASS
+synth,4,C2_start_giu_muc_1,0xb4,0x3a,0xb4,0x3a,8,8,-,-,-,PASS (chu ky lap 660 ns; CS cao giua 2 lan 10 ns)

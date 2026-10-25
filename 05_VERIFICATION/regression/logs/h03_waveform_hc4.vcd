@@ -1,0 +1,725 @@
+$date
+	Sun Oct 18 11:07:09 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module h03_spi_master_regression_tb $end
+$var wire 1 ! sclk $end
+$var wire 8 " rx_data [7:0] $end
+$var wire 1 # mosi $end
+$var wire 1 $ done $end
+$var wire 1 % cs_n $end
+$var wire 1 & busy $end
+$var parameter 32 ' HC $end
+$var real 1 ( TCLK $end
+$var real 1 ) T_HOLD_SLAVE $end
+$var reg 1 * clk $end
+$var reg 1 + miso $end
+$var reg 1 , rst_n $end
+$var reg 8 - rx_before [7:0] $end
+$var reg 8 . slave_rx [7:0] $end
+$var reg 8 / slave_tx [7:0] $end
+$var reg 1 0 start $end
+$var reg 8 1 tx_data [7:0] $end
+$var integer 32 2 busy_err [31:0] $end
+$var integer 32 3 done_cycles [31:0] $end
+$var integer 32 4 fall_cnt [31:0] $end
+$var reg 1 5 in_txn $end
+$var integer 32 6 miso_idx [31:0] $end
+$var integer 32 7 mosi_phase_err [31:0] $end
+$var integer 32 8 n_checks [31:0] $end
+$var integer 32 9 n_errors [31:0] $end
+$var integer 32 : rise_cnt [31:0] $end
+$var integer 32 ; rx_early_err [31:0] $end
+$var real 1 < setup_min_all $end
+$var real 1 = setup_min_case $end
+$var real 1 > t_cs_fall $end
+$var real 1 ? t_cs_rise $end
+$var real 1 @ t_first_rise $end
+$var real 1 A t_last_fall $end
+$var real 1 B t_last_rise $end
+$var real 1 C t_mosi_chg $end
+$var real 1 D t_ref $end
+$scope module dut $end
+$var wire 1 * clk $end
+$var wire 1 E half_tick $end
+$var wire 1 + miso $end
+$var wire 1 , rst_n $end
+$var wire 1 0 start $end
+$var wire 8 F tx_data [7:0] $end
+$var parameter 32 G HALF_CYCLES $end
+$var parameter 32 H HCW $end
+$var parameter 1 I MSB_FIRST $end
+$var reg 1 & busy $end
+$var reg 1 % cs_n $end
+$var reg 1 $ done $end
+$var reg 4 J edge_count [3:0] $end
+$var reg 2 K half_count [1:0] $end
+$var reg 1 # mosi $end
+$var reg 8 L rx_data [7:0] $end
+$var reg 8 M rx_shift [7:0] $end
+$var reg 1 ! sclk $end
+$var reg 2 N state [1:0] $end
+$var reg 8 O tx_shift [7:0] $end
+$upscope $end
+$scope begin $unm_blk_26 $end
+$upscope $end
+$scope task chk $end
+$upscope $end
+$scope task info_fsm_illegal_state $end
+$upscope $end
+$scope task pulse_start $end
+$upscope $end
+$scope task reset_dut $end
+$upscope $end
+$scope task run_case $end
+$upscope $end
+$scope task test_reset_mid_transfer $end
+$upscope $end
+$scope task test_start_held_high $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#50000
+$dumpon
+b0 O
+b0 N
+b0 M
+b0 L
+b0 K
+b0 J
+b0 F
+0E
+r0 D
+r5 C
+r0 B
+r0 A
+r0 @
+r0 ?
+r0 >
+r0 =
+r1000000000 <
+bx ;
+bx :
+b0 9
+b0 8
+bx 7
+bx 6
+05
+bx 4
+bx 3
+bx 2
+b0 1
+00
+b0 /
+bx .
+bx -
+1,
+0+
+0*
+0&
+1%
+0$
+0#
+b0 "
+0!
+$end
+b0 3
+b111010 /
+#55000
+1*
+#60000
+10
+b10010110 1
+b10010110 F
+0*
+#65000
+r65 C
+b0 -
+b0 ;
+b0 2
+b0 7
+r1000000000 =
+b111 6
+b0 .
+b0 4
+b0 :
+r65 D
+r65 >
+15
+b1 N
+1#
+b10010110 O
+0%
+1&
+1*
+#70000
+00
+0*
+#75000
+b1 K
+1*
+#80000
+0*
+#85000
+b10 K
+1*
+#90000
+0*
+#95000
+1E
+b11 K
+1*
+#100000
+0*
+#105000
+b1 .
+r40 =
+r105 B
+r105 @
+b1 :
+0E
+b1 J
+1!
+b0 K
+1*
+#106000
+x+
+#110000
+0*
+#115000
+b1 K
+1*
+#120000
+0*
+#125000
+b10 K
+1*
+#130000
+0*
+#135000
+1E
+b11 K
+1*
+#140000
+0*
+#145000
+r145 C
+0+
+b110 6
+r145 D
+r145 A
+b1 4
+0E
+0#
+b101100 O
+0!
+b0 K
+1*
+#150000
+0*
+#155000
+b1 K
+1*
+#160000
+0*
+#165000
+b10 K
+1*
+#170000
+0*
+#175000
+1E
+b11 K
+1*
+#180000
+0*
+#185000
+b10 .
+r185 B
+b10 :
+0E
+b10 J
+1!
+b0 K
+1*
+#186000
+x+
+#190000
+0*
+#195000
+b1 K
+1*
+#200000
+0*
+#205000
+b10 K
+1*
+#210000
+0*
+#215000
+1E
+b11 K
+1*
+#220000
+0*
+#225000
+1+
+b101 6
+r225 D
+r225 A
+b10 4
+0E
+b1011000 O
+0!
+b0 K
+1*
+#230000
+0*
+#235000
+b1 K
+1*
+#240000
+0*
+#245000
+b10 K
+1*
+#250000
+0*
+#255000
+1E
+b11 K
+1*
+#260000
+0*
+#265000
+b100 .
+r265 B
+b11 :
+0E
+b11 J
+b1 M
+1!
+b0 K
+1*
+#266000
+x+
+#270000
+0*
+#275000
+b1 K
+1*
+#280000
+0*
+#285000
+b10 K
+1*
+#290000
+0*
+#295000
+1E
+b11 K
+1*
+#300000
+0*
+#305000
+r305 C
+1+
+b100 6
+r305 D
+r305 A
+b11 4
+0E
+1#
+b10110000 O
+0!
+b0 K
+1*
+#310000
+0*
+#315000
+b1 K
+1*
+#320000
+0*
+#325000
+b10 K
+1*
+#330000
+0*
+#335000
+1E
+b11 K
+1*
+#340000
+0*
+#345000
+b1001 .
+r345 B
+b100 :
+0E
+b100 J
+b11 M
+1!
+b0 K
+1*
+#346000
+x+
+#350000
+0*
+#355000
+b1 K
+1*
+#360000
+0*
+#365000
+b10 K
+1*
+#370000
+0*
+#375000
+1E
+b11 K
+1*
+#380000
+0*
+#385000
+r385 C
+1+
+b11 6
+r385 D
+r385 A
+b100 4
+0E
+0#
+b1100000 O
+0!
+b0 K
+1*
+#390000
+0*
+#395000
+b1 K
+1*
+#400000
+0*
+#405000
+b10 K
+1*
+#410000
+0*
+#415000
+1E
+b11 K
+1*
+#420000
+0*
+#425000
+b10010 .
+r425 B
+b101 :
+0E
+b101 J
+b111 M
+1!
+b0 K
+1*
+#426000
+x+
+#430000
+0*
+#435000
+b1 K
+1*
+#440000
+0*
+#445000
+b10 K
+1*
+#450000
+0*
+#455000
+1E
+b11 K
+1*
+#460000
+0*
+#465000
+r465 C
+0+
+b10 6
+r465 D
+r465 A
+b101 4
+0E
+1#
+b11000000 O
+0!
+b0 K
+1*
+#470000
+0*
+#475000
+b1 K
+1*
+#480000
+0*
+#485000
+b10 K
+1*
+#490000
+0*
+#495000
+1E
+b11 K
+1*
+#500000
+0*
+#505000
+b100101 .
+r505 B
+b110 :
+0E
+b110 J
+b1110 M
+1!
+b0 K
+1*
+#506000
+x+
+#510000
+0*
+#515000
+b1 K
+1*
+#520000
+0*
+#525000
+b10 K
+1*
+#530000
+0*
+#535000
+1E
+b11 K
+1*
+#540000
+0*
+#545000
+1+
+b1 6
+r545 D
+r545 A
+b110 4
+0E
+b10000000 O
+0!
+b0 K
+1*
+#550000
+0*
+#555000
+b1 K
+1*
+#560000
+0*
+#565000
+b10 K
+1*
+#570000
+0*
+#575000
+1E
+b11 K
+1*
+#580000
+0*
+#585000
+b1001011 .
+r585 B
+b111 :
+0E
+b111 J
+b11101 M
+1!
+b0 K
+1*
+#586000
+x+
+#590000
+0*
+#595000
+b1 K
+1*
+#600000
+0*
+#605000
+b10 K
+1*
+#610000
+0*
+#615000
+1E
+b11 K
+1*
+#620000
+0*
+#625000
+r625 C
+0+
+b0 6
+r625 D
+r625 A
+b111 4
+0E
+0#
+b0 O
+0!
+b0 K
+1*
+#630000
+0*
+#635000
+b1 K
+1*
+#640000
+0*
+#645000
+b10 K
+1*
+#650000
+0*
+#655000
+1E
+b11 K
+1*
+#660000
+0*
+#665000
+b10010110 .
+r665 B
+b1000 :
+0E
+b1000 J
+b111010 M
+1!
+b0 K
+1*
+#666000
+x+
+#670000
+0*
+#675000
+b1 K
+1*
+#680000
+0*
+#685000
+b10 K
+1*
+#690000
+0*
+#695000
+1E
+b11 K
+1*
+#700000
+0*
+#705000
+r705 D
+r705 A
+b1000 4
+0E
+b10 N
+0!
+b0 K
+1*
+#710000
+0*
+#715000
+0+
+r715 ?
+05
+b0 N
+1$
+b111010 "
+b111010 L
+0&
+1%
+1*
+#716000
+b1 3
+#720000
+b1 8
+0*
+#725000
+b0 J
+0$
+1*
+#730000
+0*
+#735000
+1*
+#740000
+0*
+#745000
+1*
+#750000
+r40 <
+b1101 8
+0*
+#755000
+1*
+#760000
+0*
+#765000
+1*
+#770000
+$dumpoff
+bx O
+bx N
+bx M
+bx L
+bx K
+bx J
+bx F
+xE
+rNaN D
+rNaN C
+rNaN B
+rNaN A
+rNaN @
+rNaN ?
+rNaN >
+rNaN =
+rNaN <
+bx ;
+bx :
+bx 9
+bx 8
+bx 7
+bx 6
+x5
+bx 4
+bx 3
+bx 2
+bx 1
+x0
+bx /
+bx .
+bx -
+x,
+x+
+x*
+x&
+x%
+x$
+x#
+bx "
+x!
+$end
+0*

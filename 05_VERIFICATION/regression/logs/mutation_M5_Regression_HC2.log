@@ -1,0 +1,27 @@
+RESULT,HC,case,tx,slave,mosi_thu,rx,rise,fall,t_lead_ns,t_lag_ns,setup_min_ns,ket_qua
+VCD info: dumpfile /tmp/claude-0/-home-claude/29617bf7-8201-5419-9679-0f4f637794bd/scratchpad/h03_teacher/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/logs/tmpuzxw378b/x.vcd opened for output.
+    [FAIL] D_waveform_mau : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=430000)
+RESULT,2,D_waveform_mau,0x96,0x3a,0x96,0x3a,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A1_tx00_rxFF : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=830000)
+RESULT,2,A1_tx00_rxFF,0x00,0xff,0x00,0xff,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A2_txFF_rx00 : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=1230000)
+RESULT,2,A2_txFF_rx00,0xff,0x00,0xff,0x00,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A3_txA5_rx3A : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=1630000)
+RESULT,2,A3_txA5_rx3A,0xa5,0x3a,0xa5,0x3a,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A4_txB4_rx3A : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=2030000)
+RESULT,2,A4_txB4_rx3A,0xb4,0x3a,0xb4,0x3a,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A5_tx01_rx80 : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=2430000)
+RESULT,2,A5_tx01_rx80,0x01,0x80,0x01,0x80,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] A6_tx80_rx01 : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=2830000)
+RESULT,2,A6_tx80_rx01,0x80,0x01,0x80,0x01,8,8,20.0,0.0,20.0,FAIL
+RESULT,2,C1_reset_giua_transaction,0x3a,0xb4,-,0x00,4,4,-,-,-,PASS
+    [FAIL] C1b_sau_reset : t_lag = 0.0 ns (dac ta: 1 x Tclk)  (t=3440000)
+RESULT,2,C1b_sau_reset,0x3a,0xb4,0x3a,0xb4,8,8,20.0,0.0,20.0,FAIL
+    [FAIL] C2_start_giu_muc_1 : transaction 0: slave thu 0xb4, DUT thu 0xb4  (t=4900000)
+    [FAIL] C2_start_giu_muc_1 : CS o muc 1 giua 2 transaction = 20.0 ns (dac ta: 1 x Tclk)  (t=4900000)
+    [FAIL] C2_start_giu_muc_1 : CS o muc 1 giua 2 transaction = 20.0 ns (dac ta: 1 x Tclk)  (t=4900000)
+RESULT,2,C2_start_giu_muc_1,0xb4,0x3a,0xb4,0x3a,8,8,-,-,-,FAIL (chu ky lap 340 ns; CS cao giua 2 lan 20 ns)
+INFO,2,C3_fsm_ma_2b11,FSM KET o 2'b11 sau 200 chu ky; START sau do KHONG duoc nhan (khoi chet cho toi khi reset)
+SUMMARY,HC=2,checks=116,errors=11,setup_min_tat_ca_ca=20.0 ns
+FATAL: /tmp/claude-0/-home-claude/29617bf7-8201-5419-9679-0f4f637794bd/scratchpad/h03_teacher/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/h03_spi_master_regression_tb.sv:289: H03 REGRESSION FAIL (HC=2): 11 / 116 checks loi
+       Time: 7360000  Scope: h03_spi_master_regression_tb.$unm_blk_26

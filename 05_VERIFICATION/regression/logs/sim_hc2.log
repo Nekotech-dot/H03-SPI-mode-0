@@ -1,0 +1,16 @@
+RESULT,HC,case,tx,slave,mosi_thu,rx,rise,fall,t_lead_ns,t_lag_ns,setup_min_ns,ket_qua
+VCD info: dumpfile /mnt/e/miniproject/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/logs/h03_waveform_hc2.vcd opened for output.
+RESULT,2,D_waveform_mau,0x96,0x3a,0x96,0x3a,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A1_tx00_rxFF,0x00,0xff,0x00,0xff,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A2_txFF_rx00,0xff,0x00,0xff,0x00,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A3_txA5_rx3A,0xa5,0x3a,0xa5,0x3a,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A4_txB4_rx3A,0xb4,0x3a,0xb4,0x3a,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A5_tx01_rx80,0x01,0x80,0x01,0x80,8,8,20.0,10.0,20.0,PASS
+RESULT,2,A6_tx80_rx01,0x80,0x01,0x80,0x01,8,8,20.0,10.0,20.0,PASS
+RESULT,2,C1_reset_giua_transaction,0x3a,0xb4,-,0x00,4,4,-,-,-,PASS
+RESULT,2,C1b_sau_reset,0x3a,0xb4,0x3a,0xb4,8,8,20.0,10.0,20.0,PASS
+RESULT,2,C2_start_giu_muc_1,0xb4,0x3a,0xb4,0x3a,8,8,-,-,-,PASS (chu ky lap 340 ns; CS cao giua 2 lan 10 ns)
+INFO,2,C3_fsm_ma_2b11,FSM KET o 2'b11 sau 200 chu ky; START sau do KHONG duoc nhan (khoi chet cho toi khi reset)
+SUMMARY,HC=2,checks=116,errors=0,setup_min_tat_ca_ca=20.0 ns
+ALL H03 TESTS PASS (HC=2, 116 checks)
+/mnt/e/miniproject/H03_Chu_SPI_che_do_0/05_VERIFICATION/regression/h03_spi_master_regression_tb.sv:300: $finish called at 7370000 (1ps)

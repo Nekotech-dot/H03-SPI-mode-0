@@ -1,0 +1,16 @@
+VCD info: dumpfile h03_spi_master.vcd opened for output.
+
+================================
+H03 SPI MASTER MODE 0 - RESULTS
+================================
+TX DATA      = 0x96
+MOSI CAPTURE = 0x96
+SLAVE TX     = 0x3c
+RX DATA      = 0x3c
+RISE COUNT   = 8
+FALL COUNT   = 8
+CS_n         = 1
+================================
+H03 TB PASS
+
+05_VERIFICATION/testbench/h03_spi_master_tb.sv:146: $finish called at 376000 (1ps)

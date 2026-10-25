@@ -1,0 +1,2 @@
+FATAL: /tmp/claude-0/-home-claude/29617bf7-8201-5419-9679-0f4f637794bd/scratchpad/h03_teacher/H03_Chu_SPI_che_do_0/05_VERIFICATION/testbench/h03_spi_master_tb.sv:44: Expected 8 rising edges
+       Time: 395  Scope: h03_spi_master_tb
