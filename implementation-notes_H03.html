@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H03 — Chủ SPI chế độ 0 · Ghi chú thực hiện</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1d21; --muted:#5c6570; --line:#e3e7eb;
+  --accent:#1f5fa9; --accent-soft:#eef4fb; --code-bg:#f5f7f9;
+  --ok:#137a4d; --ok-bg:#e8f6ee; --warn:#8a5a00; --warn-bg:#fdf4e2;
+  --bad:#a52020; --bad-bg:#fceded; --open:#7a5ba8; --open-bg:#f3eefa;
+  --maxw:960px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181c; --fg:#e6e9ec; --muted:#98a2ad; --line:#2a2f36;
+    --accent:#6fa8e0; --accent-soft:#1c2733; --code-bg:#1b1f24;
+    --ok:#5cc08d; --ok-bg:#16291f; --warn:#d8a54a; --warn-bg:#2a2314;
+    --bad:#e88b8b; --bad-bg:#2b1a1a; --open:#b79ad6; --open-bg:#241d2e;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181c; --fg:#e6e9ec; --muted:#98a2ad; --line:#2a2f36;
+  --accent:#6fa8e0; --accent-soft:#1c2733; --code-bg:#1b1f24;
+  --ok:#5cc08d; --ok-bg:#16291f; --warn:#d8a54a; --warn-bg:#2a2314;
+  --bad:#e88b8b; --bad-bg:#2b1a1a; --open:#b79ad6; --open-bg:#241d2e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 16px 96px}
+header.doc{
+  border-bottom:1px solid var(--line); margin-bottom:28px; padding:36px 0 22px;
+}
+header.doc .eyebrow{
+  font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; margin-bottom:10px;
+}
+header.doc h1{font-size:clamp(24px,4.4vw,34px); line-height:1.25; margin:0 0 14px}
+.badges{display:flex; flex-wrap:wrap; gap:7px; margin-top:6px}
+.badge{
+  font-size:12.5px; padding:3px 10px; border-radius:999px;
+  border:1px solid var(--line); color:var(--muted); background:var(--accent-soft);
+  white-space:nowrap;
+}
+.badge.ok{color:var(--ok); background:var(--ok-bg); border-color:transparent}
+.badge.warn{color:var(--warn); background:var(--warn-bg); border-color:transparent}
+.badge.bad{color:var(--bad); background:var(--bad-bg); border-color:transparent}
+.badge.open{color:var(--open); background:var(--open-bg); border-color:transparent}
+nav.toc{
+  border:1px solid var(--line); border-radius:10px; padding:16px 20px;
+  margin:0 0 32px; background:var(--accent-soft);
+}
+nav.toc p{margin:0 0 8px; font-weight:700; font-size:13px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted)}
+nav.toc ul{margin:0; padding-left:20px}
+nav.toc li{margin:3px 0}
+nav.toc a{color:var(--fg); text-decoration:none}
+nav.toc a:hover{color:var(--accent); text-decoration:underline}
+nav.toc ul ul{padding-left:18px; font-size:14.5px}
+h2{font-size:22px; margin:40px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+h3{font-size:18px; margin:28px 0 8px}
+h4{font-size:16px; margin:22px 0 6px; color:var(--muted)}
+p{margin:12px 0}
+a{color:var(--accent)}
+ul,ol{padding-left:24px}
+li{margin:4px 0}
+code{
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  font-size:.9em; background:var(--code-bg); padding:1.5px 5px; border-radius:4px;
+}
+pre{
+  background:var(--code-bg); border:1px solid var(--line); border-radius:8px;
+  padding:14px 16px; overflow-x:auto; line-height:1.55; font-size:13.5px;
+}
+pre code{background:none; padding:0; font-size:inherit}
+blockquote{
+  margin:16px 0; padding:2px 18px; border-left:3px solid var(--accent);
+  background:var(--accent-soft); border-radius:0 8px 8px 0; color:var(--fg);
+}
+blockquote p{margin:10px 0}
+.tablewrap{overflow-x:auto; margin:16px 0; -webkit-overflow-scrolling:touch}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:420px}
+th,td{border:1px solid var(--line); padding:7px 11px; text-align:left; vertical-align:top}
+th{background:var(--accent-soft); font-weight:650; white-space:nowrap}
+tbody tr:nth-child(even) td{background:color-mix(in srgb, var(--code-bg) 55%, transparent)}
+hr{border:0; border-top:1px solid var(--line); margin:34px 0}
+footer.doc{
+  margin-top:56px; padding-top:18px; border-top:1px solid var(--line);
+  color:var(--muted); font-size:13.5px;
+}
+.themebtn{
+  position:fixed; right:14px; bottom:14px; z-index:10;
+  border:1px solid var(--line); background:var(--bg); color:var(--muted);
+  border-radius:999px; padding:8px 14px; font-size:13px; cursor:pointer;
+}
+.themebtn:hover{color:var(--fg)}
+@media (max-width:640px){
+  .wrap{padding:0 16px 72px}
+  header.doc{padding:26px 0 18px}
+  nav.toc{padding:14px 16px}
+}
+@media print{
+  .themebtn{display:none}
+  nav.toc{break-inside:avoid}
+  pre,table,blockquote{break-inside:avoid}
+  body{font-size:11pt}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="doc">
+  <div class="eyebrow">RTL2GDS · Đề H03 · Ghi chú thực hiện</div>
+  <h1>H03 — Chủ SPI chế độ 0 · Ghi chú thực hiện</h1>
+  <div class="badges"><span class="badge ">H · Giao tiếp nối tiếp</span><span class="badge ">Độ khó: Trung bình</span><span class="badge ">Loại mạch: Tuần tự</span><span class="badge ok">Mô phỏng: PASS</span><span class="badge ">Tổng hợp: 156 cell · 36 FF</span><span class="badge ">Đường tới hạn: 1,9 ns</span><span class="badge warn">Physical design: CHƯA CHẠY</span></div>
+</header>
+<nav class="toc"><p>Mục lục</p><ul><li><a href="#1-bai-toan-nay-thuc-chat-la-gi">1. Bài toán này thực chất là gì</a></li><li><a href="#2-ban-chat-ky-thuat-co-che-hoat-dong">2. Bản chất kỹ thuật — cơ chế hoạt động</a></li><li><a href="#3-doc-ma-nguon-rtl-lam-gi-tung-dong-quan-trong">3. Đọc mã nguồn: RTL làm gì, từng dòng quan trọng</a></li><li><a href="#4-vi-sao-chon-kien-truc-nay">4. Vì sao chọn kiến trúc này</a></li><li><a href="#5-cach-thuc-hien-lo-trinh-8-buoc-tu-dac-ta-toi-gdsii">5. Cách thực hiện — lộ trình 8 bước từ đặc tả tới GDSII</a></li><li><a href="#6-so-lieu-that-da-do-duoc-va-cach-doc-chung">6. Số liệu thật đã đo được và cách đọc chúng</a></li><li><a href="#7-tra-loi-cac-cau-hoi-ky-thuat-cua-charter-muc-2">7. Trả lời các câu hỏi kỹ thuật của Charter (mục 2)</a></li><li><a href="#8-tra-loi-cau-phan-tich-rieng-charter-muc-9">8. Trả lời câu phân tích riêng (Charter mục 9)</a></li><ul><li><a href="#chung-minh-waveform-day-du-03-architecture-timing-diagram-md-1-5">Chứng minh (waveform đầy đủ: 03_ARCHITECTURE/timing_diagram.md §1, §5)</a></li><li><a href="#khoang-setup-ma-ben-to-duoc-huong">Khoảng setup mà bên tớ được hưởng</a></li></ul><li><a href="#9-nhung-cho-sinh-vien-hay-sai-va-cach-phat-hien">9. Những chỗ sinh viên hay sai và cách phát hiện</a></li><li><a href="#10-cau-hoi-mentor-nen-dat-khi-bao-ve">10. Câu hỏi mentor nên đặt khi bảo vệ</a></li><li><a href="#11-gioi-han-da-chung-minh-duoc-gi-chua-chung-minh-duoc-gi">11. Giới hạn: đã chứng minh được gì, chưa chứng minh được gì</a></li><ul><li><a href="#da-chung-minh">✅ Đã chứng minh</a></li><li><a href="#chua-chung-minh">❌ Chưa chứng minh</a></li><li><a href="#ngoai-pham-vi-charter-muc-3-khong-phai-chua-lam">⬛ Ngoài phạm vi (Charter mục 3) — không phải &quot;chưa làm&quot;</a></li><li><a href="#va-mot-canh-bao-cuoi-quan-trong-nhat-cua-de-h03">⚠️ Và một cảnh báo cuối, quan trọng nhất của đề H03:</a></li></ul></ul></nav>
+<main>
+<hr>
+<h2 id="1-bai-toan-nay-thuc-chat-la-gi">1. Bài toán này thực chất là gì</h2>
+<p>Bề mặt: "gửi một byte và nhận một byte qua bốn dây". Thực chất: <strong>thoả thuận PHA giữa một dây
+clock và hai dây dữ liệu, và giữ thoả thuận đó tuyệt đối.</strong></p>
+<p>Khác hẳn UART. H02 (bộ thu UART) phải <strong>đoán</strong> biên bit vì không có dây clock. H03 <strong>gửi hẳn</strong>
+clock đi — bên tớ không phải đoán gì. Toàn bộ bài toán "lấy mẫu giữa bit" biến mất. Nhưng đổi
+lại, H03 phải chịu trách nhiệm cho một thứ khác: <strong>quan hệ pha</strong>.</p>
+<p>SPI có bốn chế độ, khác nhau ở hai bit:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">CPOL</th>
+<th style="text-align: center;">CPHA</th>
+<th>Lấy mẫu ở</th>
+<th>Đổi dữ liệu ở</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mode 0</strong> (đề này)</td>
+<td style="text-align: center;"><strong>0</strong> (SCLK nghỉ <strong>thấp</strong>)</td>
+<td style="text-align: center;"><strong>0</strong></td>
+<td><strong>sườn LÊN</strong></td>
+<td><strong>sườn XUỐNG</strong></td>
+</tr>
+<tr>
+<td>Mode 1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td>sườn xuống</td>
+<td>sườn lên</td>
+</tr>
+<tr>
+<td>Mode 2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td>sườn xuống</td>
+<td>sườn lên</td>
+</tr>
+<tr>
+<td>Mode 3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td>sườn lên</td>
+<td>sườn xuống</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nếu chủ và tớ không cùng chế độ, <strong>mọi bit đều lệch</strong> — và tệ hơn, hệ thống vẫn "có vẻ chạy"
+khi dữ liệu ổn định. Đó chính là điều Charter mục 10 cảnh báo.</p>
+<p><strong>Hệ quả quan trọng nhất của CPHA = 0</strong>, và là chỗ nhiều thiết kế làm sai: <strong>bit đầu tiên
+phải có mặt trên MOSI TRƯỚC sườn lên thứ nhất</strong> — tức là ngay khi CS xuống, chứ không phải
+chờ một sườn SCLK. RTL của H03 làm đúng (dòng 56 + 60): <code>cs_n &lt;= 1'b0</code> và
+<code>mosi &lt;= tx_data[7]</code> được gán <strong>cùng một cạnh clock</strong>.</p>
+<p>Bối cảnh Charter mục 1 — đọc cảm biến gia tốc trong <strong>thiết bị đeo tay</strong> — chốt hai ràng buộc
+thật: <strong>công suất thấp</strong> (pin nhỏ) và <strong>tần số đọc vừa phải</strong> (vài chục đến vài trăm Hz).
+Cả hai đều ủng hộ SPI: giao dịch ngắn, xong là nhả bus, không có mạch nào phải chạy liên tục
+giữa hai lần đọc.</p>
+<h2 id="2-ban-chat-ky-thuat-co-che-hoat-dong">2. Bản chất kỹ thuật — cơ chế hoạt động</h2>
+<p>H03 là <strong>hai thanh ghi dịch chạy ngược pha nhau quanh một bộ chia clock</strong>. Hiểu được sự lệch
+pha đó là hiểu cả khối.</p>
+<pre><code>      clk ──▶ half_count (mod HALF_CYCLES) ──half_tick──▶ sclk (ĐẢO mỗi tick)
+                                                            │
+                        ┌───────────────────────────────────┴──────────────┐
+                        │                                                  │
+                 sclk sắp LÊN                                      sclk sắp XUỐNG
+                        │                                                  │
+             rx_shift ← {rx_shift[6:0], miso}              tx_shift ← tx_shift &lt;&lt; 1
+             edge_count + 1                                mosi     ← tx_shift[6]
+</code></pre>
+<p><strong>Nút thắt của SPI không phải là logic — mà là NỬA CHU KỲ SCLK ngăn cách hai sự kiện đó.</strong>
+<code>mosi</code> đổi ở sườn xuống thứ <code>k</code>; chip tớ lấy mẫu ở sườn lên thứ <code>k+1</code>. Khoảng cách giữa hai
+mốc đó — <code>HALF_CYCLES × T_clk</code> — <strong>chính là khoảng setup</strong> mà bên tớ được hưởng. Nó không phải
+chi tiết hiện thực; nó <strong>là định nghĩa</strong> của chế độ 0.</p>
+<p>Và điều đẹp nhất: khoảng setup đó <strong>đồng đều cho mọi bit, kể cả bit đầu tiên</strong>, vì <code>mosi</code> được
+đặt tại <code>E(s)</code> còn sườn lên #1 ở <code>E(s + HALF_CYCLES)</code> — đúng bằng khoảng cách giữa mọi cặp
+sườn xuống/lên kế tiếp. Nhiều hiện thực sai làm bit đầu "hẹp hơn" các bit sau.</p>
+<p><strong>Chi tiết tinh tế nhất của RTL</strong>, và nó quyết định tính đúng đắn: phép so sánh
+<code>edge_count == 8</code> được đặt ở nhánh <strong>sườn XUỐNG</strong>, không phải sườn lên.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Nếu kiểm ở nhánh sườn LÊN</th>
+<th>Nếu kiểm ở nhánh sườn XUỐNG (RTL làm thế này)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sau sườn lên #8 ⟹ sang <code>FINISH</code> ngay</td>
+<td>Sườn xuống #8 <strong>vẫn được phát</strong></td>
+</tr>
+<tr>
+<td><code>sclk</code> <strong>kẹt ở mức cao</strong> khi nhả CS</td>
+<td><code>sclk &lt;= 1'b0</code> chạy trước</td>
+</tr>
+<tr>
+<td>Chu kỳ SCLK thứ 8 <strong>không hoàn chỉnh</strong></td>
+<td>Đủ <strong>8 chu kỳ trọn vẹn</strong></td>
+</tr>
+<tr>
+<td>❌ Vi phạm CPOL = 0</td>
+<td>✅ Đúng chuẩn</td>
+</tr>
+</tbody>
+</table></div>
+<p>Đây là loại lỗi <strong>rất khó thấy</strong> nếu testbench chỉ đếm <code>rise_count == 8</code> — đúng như testbench
+hiện tại đang làm.</p>
+<h2 id="3-doc-ma-nguon-rtl-lam-gi-tung-dong-quan-trong">3. Đọc mã nguồn: RTL làm gì, từng dòng quan trọng</h2>
+<p><strong>(a) Nhận lệnh — CPHA = 0 thể hiện ở đây, dòng 54–62:</strong></p>
+<pre><code class="language-systemverilog">if (start) begin
+    busy &lt;= 1'b1;
+    cs_n &lt;= 1'b0;
+    tx_shift &lt;= tx_data;
+    rx_shift &lt;= '0;
+    mosi &lt;= MSB_FIRST ? tx_data[7] : tx_data[0];   // ← bit đầu CÙNG LÚC với CS
+    state &lt;= TRANSFER;
+end
+</code></pre>
+<p>Sáu thanh ghi cập nhật tại một cạnh. <code>mosi &lt;= tx_data[7]</code> đi <strong>thẳng</strong> từ cổng vào, <strong>không</strong>
+qua <code>tx_shift</code> — đó là lý do <code>tx_shift[7]</code> không bao giờ được đọc (xem (d)).</p>
+<p><strong>(b) Chọn pha — dòng 71–80:</strong></p>
+<pre><code class="language-systemverilog">if (half_tick) begin
+    half_count &lt;= '0;
+    if (sclk == 1'b0) begin           // sắp có SƯỜN LÊN
+        sclk &lt;= 1'b1;
+        rx_shift &lt;= {rx_shift[6:0],miso};
+        edge_count &lt;= edge_count + 1'b1;
+    end else begin                    // sắp có SƯỜN XUỐNG
+        sclk &lt;= 1'b0;
+</code></pre>
+<p><code>sclk</code> vừa là <strong>đầu ra</strong> vừa là <strong>biến chọn nhánh</strong>. Vì <code>sclk &lt;= 1'b1</code> là gán không chặn,
+<code>miso</code> được lấy mẫu <strong>trước khi</strong> <code>sclk</code> thực sự lên trên dây — tức là chủ bắt giá trị đã ổn
+định <strong>suốt toàn bộ pha SCLK thấp</strong>, đúng bằng bit mà một chip tớ mode 0 trình ra. Hành vi
+<strong>đúng</strong>, và cho khoảng setup lớn nhất có thể.</p>
+<p><strong>(c) Dịch ra — "nhìn trước một bit", dòng 85–91:</strong></p>
+<pre><code class="language-systemverilog">if (MSB_FIRST) begin
+    tx_shift &lt;= {tx_shift[6:0],1'b0};
+    mosi     &lt;= tx_shift[6];        // ← KHÔNG phải [7]
+end
+</code></pre>
+<p>Cùng cơ chế với H01 nhưng <strong>ngược chiều dịch</strong>: sau cạnh này <code>tx_shift</code> đã dịch <strong>trái</strong>, nên
+MSB mới là <code>tx_shift_cũ[6]</code>. Đọc <code>[7]</code> sẽ <strong>lặp lại</strong> bit vừa gửi.</p>
+<p><strong>(d) ⭐ Hệ quả: <code>tx_shift[7]</code> là mã chết chứng minh được.</strong>
+Nó được <strong>ghi</strong> ở hai chỗ (dòng 57, 86) nhưng <strong>không bao giờ xuất hiện ở vế phải</strong> của bất
+kỳ biểu thức nào. Yosys chứng minh được điều đó và <strong>xoá hẳn</strong>: 37 bit khai báo →
+<strong>36 <code>dfxtp_1</code></strong>. <code>netlist.v</code> chỉ có <code>\tx_shift[0]</code> … <code>\tx_shift[6]</code>.</p>
+<p><strong>(e) <code>FINISH</code> — dọn dẹp, dòng 99–106:</strong></p>
+<pre><code class="language-systemverilog">FINISH: begin
+    sclk &lt;= 1'b0;  cs_n &lt;= 1'b1;  busy &lt;= 1'b0;
+    rx_data &lt;= rx_shift;  done &lt;= 1'b1;
+    state &lt;= IDLE;
+end
+</code></pre>
+<p>Một chu kỳ dành riêng cho: nhả CS, chốt <code>rx_data</code>, phát xung <code>done</code>.</p>
+<p><strong>(f) ⛔ Chỗ RTL thiếu — <code>case</code> không có <code>default</code>, dòng 46–107.</strong>
+<code>enum logic [1:0]</code> với 3 trạng thái ⟹ mã <code>2'b11</code> thừa. Nếu <code>state = 2'b11</code>, <strong>không lệnh gán
+nào chạy</strong> ⟹ FSM <strong>kẹt vĩnh viễn</strong>, <code>cs_n</code> có thể kẹt ở <code>0</code>. Xem <code>fsm.md</code> §5.2.</p>
+<h2 id="4-vi-sao-chon-kien-truc-nay">4. Vì sao chọn kiến trúc này</h2>
+<p>FSM 3 trạng thái + 2 thanh ghi dịch riêng + 1 thanh ghi ra. Ba lý do:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Lý do</th>
+<th>Nội dung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dạy học</strong></td>
+<td>Hai thanh ghi dịch tách bạch làm "song công" thành thứ <strong>nhìn thấy được</strong>. Một lõi SPI thương mại thường dùng <strong>một</strong> thanh ghi dùng chung (phương án B, <code>tradeoff.md</code> §5.1) — tiết kiệm <strong>7 FF ≈ 19 %</strong> nhưng giấu mất bản chất.</td>
+</tr>
+<tr>
+<td><strong>Ranh giới giao dịch</strong></td>
+<td><code>rx_data</code> riêng (8 FF) bảo đảm tầng ngoài <strong>không</strong> thấy byte đang hình thành, và giao dịch bị cắt giữa chừng không rò dữ liệu rác. Cùng lý lẽ với <code>byte_out</code> của H02 — một <strong>kiểu thiết kế nhất quán</strong>.</td>
+</tr>
+<tr>
+<td><strong>Timing dư dả</strong></td>
+<td>Slack +8,02 ns trên chu kỳ giả định 10 ns ⟹ không có lý do nào để đánh đổi độ rõ lấy tốc độ.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Bốn quyết định <strong>không</strong> được đổi:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Quyết định</th>
+<th>Vì sao bắt buộc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sclk</code>, <code>mosi</code>, <code>cs_n</code> là <strong>đầu ra thanh ghi</strong></td>
+<td>Chúng đi <strong>thẳng ra pad</strong>. Một glitch trên <code>sclk</code> bị chip tớ đếm là <strong>xung thừa</strong> ⟹ lệch cả byte. Lỗi này <strong>không</strong> xuất hiện trong mô phỏng zero-delay.</td>
+</tr>
+<tr>
+<td><code>edge_count == 8</code> kiểm ở nhánh <strong>sườn xuống</strong></td>
+<td>Nếu không, <code>sclk</code> kẹt cao ⟹ vi phạm CPOL = 0</td>
+</tr>
+<tr>
+<td>Bit đầu ra MOSI <strong>lúc CS xuống</strong></td>
+<td>Đó là CPHA = 0. Nếu chờ sườn SCLK đầu tiên, thành mode 1</td>
+</tr>
+<tr>
+<td><code>rx_data</code> là thanh ghi riêng</td>
+<td>Ranh giới giao dịch</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="5-cach-thuc-hien-lo-trinh-8-buoc-tu-dac-ta-toi-gdsii">5. Cách thực hiện — lộ trình 8 bước từ đặc tả tới GDSII</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>Bước</th>
+<th style="text-align: center;">Trạng thái thật</th>
+<th>Bằng chứng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>Chốt mode 0: CPOL = 0, CPHA = 0, MSB-first, CS bao trọn 8 xung</td>
+<td style="text-align: center;">✅</td>
+<td><code>functional_spec.md</code> §4</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>Viết mô hình chuẩn Python độc lập</td>
+<td style="text-align: center;">✅ <strong>PASS</strong> (8 nhóm test, 5000 ca)</td>
+<td><code>python_reference_run.log</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>Viết RTL: FSM 3 trạng thái + chia SCLK + 2 thanh ghi dịch</td>
+<td style="text-align: center;">✅</td>
+<td><code>rtl/h03_spi_master.sv</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>Mô phỏng RTL</td>
+<td style="text-align: center;">✅ <strong>PASS</strong> — <code>$finish</code> tại <code>t = 355 ns</code></td>
+<td><code>simulation.log</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>Tổng hợp sang <code>sky130_fd_sc_hd</code></td>
+<td style="text-align: center;">✅ PASS — 156 cell, <strong>36</strong> FF (37 khai báo)</td>
+<td><code>synth_stat.txt</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>STA với SDC giả định (10 ns, IO 1 ns)</td>
+<td style="text-align: center;">✅ PASS — slack +8,02 ns</td>
+<td><code>timing_report_max.txt</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>Ước lượng công suất</td>
+<td style="text-align: center;">✅ 1,61e-04 W</td>
+<td><code>power_report.txt</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>P&amp;R → GDS, DRC, LVS</td>
+<td style="text-align: center;">⬜ <strong>chưa chạy</strong></td>
+<td><code>physical_report.md</code> §1</td>
+</tr>
+</tbody>
+</table></div>
+<p>H03 là <strong>đề duy nhất</strong> trong ba đề nhóm H có bước 4 PASS. Nhưng xem §6 — PASS đó chứng minh
+ít hơn nhiều so với vẻ ngoài.</p>
+<h2 id="6-so-lieu-that-da-do-duoc-va-cach-doc-chung">6. Số liệu thật đã đo được và cách đọc chúng</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Chỉ số</th>
+<th style="text-align: right;">Giá trị</th>
+<th>Nguồn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Số cell</td>
+<td style="text-align: right;"><strong>156</strong></td>
+<td><code>synth_stat.txt</code></td>
+</tr>
+<tr>
+<td>Flip-flop (<code>dfxtp_1</code>)</td>
+<td style="text-align: right;"><strong>36</strong> (khai báo 37)</td>
+<td>như trên</td>
+</tr>
+<tr>
+<td>Cổng tổ hợp / FF</td>
+<td style="text-align: right;"><strong>3,33</strong></td>
+<td>120 ÷ 36</td>
+</tr>
+<tr>
+<td>Diện tích</td>
+<td style="text-align: right;"><strong>1443,8848 µm²</strong></td>
+<td><code>synth_stat.txt</code></td>
+</tr>
+<tr>
+<td>Startpoint → Endpoint</td>
+<td style="text-align: right;"><code>start</code> → <code>_241_</code></td>
+<td><code>sta/summary.txt</code></td>
+</tr>
+<tr>
+<td>Data arrival</td>
+<td style="text-align: right;"><strong>1,90 ns</strong></td>
+<td><code>timing_report_max.txt</code></td>
+</tr>
+<tr>
+<td>Slack</td>
+<td style="text-align: right;"><strong>+8,02 ns (MET)</strong></td>
+<td>như trên</td>
+</tr>
+<tr>
+<td>WNS / TNS</td>
+<td style="text-align: right;">0,00 / 0,00</td>
+<td><code>wns.txt</code> · <code>tns.txt</code></td>
+</tr>
+<tr>
+<td>Công suất</td>
+<td style="text-align: right;"><strong>1,61e-04 W</strong> (tuần tự 94,0 % · tổ hợp 6,0 %)</td>
+<td><code>power_report.txt</code></td>
+</tr>
+<tr>
+<td>Cell trên đường tới hạn</td>
+<td style="text-align: right;"><strong>4</strong></td>
+<td>BRIEF H03</td>
+</tr>
+<tr>
+<td>Mô phỏng</td>
+<td style="text-align: right;"><strong>PASS</strong>, <code>$finish</code> tại <code>t = 355 ns</code></td>
+<td><code>simulation.log</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Những gì các con số này CHỨNG MINH:</strong></p>
+<ul>
+<li><strong>36 FF phân rã chính xác, và giải thích được cả bit bị mất</strong>: <code>state</code> 2 + <code>half_count</code> 2 +
+  <code>edge_count</code> 4 + <code>tx_shift</code> <strong>7</strong> + <code>rx_shift</code> 8 + <code>rx_data</code> 8 + 5 đầu ra = <strong>36</strong>, khớp
+  từng nhóm với tên wire trong <code>netlist.v</code>. Bit thứ 37 (<code>tx_shift[7]</code>) bị xoá <strong>vì lý do
+  chứng minh được</strong>.</li>
+<li><strong>Số chu kỳ giao dịch khớp chính xác với phân tích FSM</strong>: dự đoán <code>16 × HALF_CYCLES + 1 = 33</code>
+  chu kỳ từ <code>E2</code> (<code>t = 25 ns</code>) ⟹ <code>E35</code> = <code>t = 355 ns</code>. <code>simulation.log</code> ghi
+  <code>$finish called at 355</code>. <strong>Phép đếm bằng tay khớp với mô phỏng tới từng ns.</strong></li>
+<li><strong>Đúng 8 sườn lên</strong>: testbench <code>assert(rise_count == 8)</code> PASS.</li>
+<li><strong>Mạch đúng phân loại Tuần tự</strong>: 36 FF &gt; 0; công suất tuần tự 94,0 %.</li>
+<li><strong>Không có nút thắt timing</strong>: 1,90/9,92 = dùng 19,2 % ngân sách. Trong 1,90 ns có <strong>1,00 ns
+  là input delay GIẢ ĐỊNH</strong>; logic thật chỉ <strong>0,90 ns</strong>.</li>
+<li><strong>Công suất tỉ lệ với số flip-flop</strong>: H01 ≈ 4,30e-06 W/FF, H02 ≈ 4,13e-06, H03 ≈ 4,19e-06.
+  Ba đề, ba kiến trúc khác nhau, nhưng công suất/FF <strong>gần như không đổi</strong>.</li>
+</ul>
+<p><strong>Những gì chúng KHÔNG chứng minh:</strong></p>
+<ul>
+<li>❌ <strong>"Mô phỏng PASS" KHÔNG chứng minh <code>rx_data</code> đúng</strong> — testbench <strong>không bao giờ kiểm</strong>
+  <code>rx_data</code>. Nửa "thu" của một khối <strong>song công</strong> nằm hoàn toàn ngoài vùng kiểm chứng.</li>
+<li>❌ <strong>Không chứng minh <code>mosi</code> phát đúng byte</strong> — cũng không có <code>assert</code> nào.</li>
+<li>❌ <strong>Không chứng minh FSM an toàn</strong> — <code>state = 2'b11</code> <strong>không có đường tới</strong>, nên mô phỏng
+  chức năng <strong>không thể</strong> phát hiện lỗi thiếu <code>default</code>.</li>
+<li>❌ <strong>Không chứng minh <code>MSB_FIRST = 0</code> hoạt động</strong> — nhánh đó chưa từng được chạy.</li>
+<li>❌ <strong>Không chứng minh H03 chạy được ở 100 MHz.</strong> <code>period 10.0</code> là <strong>giả định</strong> của
+  <code>design.sdc</code>; chưa có RC, chưa P&amp;R, một góc PVT.</li>
+<li>❌ <strong>Không nói gì về skew giữa ba pad</strong> <code>sclk</code>/<code>mosi</code>/<code>cs_n</code> — rủi ro vật lý <strong>lớn nhất</strong>
+  của một chủ SPI, chỉ kiểm được ở L5.</li>
+<li>⚠️ <code>miso</code> <strong>không qua bộ đồng bộ</strong>; ngân sách độ trễ vòng ⬜ <strong>chưa phân tích</strong>.</li>
+</ul>
+<h2 id="7-tra-loi-cac-cau-hoi-ky-thuat-cua-charter-muc-2">7. Trả lời các câu hỏi kỹ thuật của Charter (mục 2)</h2>
+<p><strong>① CS phải bao trọn 8 xung SCLK — chứng minh trên waveform bằng cách chỉ vào hai mốc?</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th style="text-align: center;">Mốc</th>
+<th>Sự kiện</th>
+<th>Thời điểm</th>
+<th>Khoảng cách</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td><code>cs_n</code> xuống <strong>trước</strong> sườn lên #1</td>
+<td><code>E2</code> (25 ns) vs <code>E4</code> (45 ns)</td>
+<td><strong>20 ns = <code>HALF_CYCLES</code> chu kỳ clock</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td><code>cs_n</code> lên <strong>sau</strong> sườn xuống #8</td>
+<td><code>E35</code> (355 ns) vs <code>E34</code> (345 ns)</td>
+<td><strong>10 ns = 1 chu kỳ clock</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>CS thấp trong <code>[25, 355] ns</code>, chứa trọn 8 sườn lên (45…325) và 8 sườn xuống (65…345). ✅</p>
+<blockquote>
+<p>⚠️ <strong>Phát hiện kèm theo:</strong> hai biên <strong>bất đối xứng</strong>. <code>t_CS_setup</code> tỉ lệ với <code>HALF_CYCLES</code>,
+nhưng <code>t_CS_hold</code> là <strong>hằng số 1 chu kỳ clock</strong> bất kể tham số. Nếu datasheet cảm biến đòi
+<code>t_CS_hold</code> lớn hơn, <strong>không có tham số nào chỉnh được</strong>. ⬜ Chưa kiểm.</p>
+</blockquote>
+<p><strong>② Mode 0 nghĩa là lấy mẫu MISO ở sườn nào — và mạch của em làm đúng chưa?</strong></p>
+<p><strong>Sườn LÊN.</strong> Và <strong>mạch làm đúng</strong>: <code>rx_shift &lt;= {rx_shift[6:0],miso}</code> nằm trong nhánh
+<code>sclk == 1'b0</code> (tức là cạnh clock mà <code>sclk</code> sắp lên), dòng 71–74. Trên waveform, <code>rx_shift</code>
+đổi tại <code>E4, E8, E12, …, E32</code> — đúng 8 sườn lên — và <strong>không</strong> đổi tại các sườn xuống.</p>
+<blockquote>
+<p>⚠️ <strong>Nhưng testbench thì lái MISO SAI sườn</strong>: nó lái <code>miso</code> trong <code>always @(posedge sclk)</code>
+— tức là <strong>sau</strong> khi chủ đã lấy mẫu. Hậu quả: <code>rx_data</code> thật sẽ là <strong><code>0x1E</code></strong> thay vì
+<code>0x3C</code>, trễ đúng một bit. Lỗi này <strong>bị che hoàn toàn</strong> vì testbench không kiểm <code>rx_data</code>.
+Phán xử đầy đủ: <code>corner_cases.md</code> §1.1. <strong>Lỗi ở TESTBENCH, không ở DUT.</strong></p>
+</blockquote>
+<p><strong>③ Phát MOSI và thu MISO xảy ra đồng thời — điều đó tiết kiệm được gì so với gửi rồi nhận?</strong></p>
+<p><strong>Tiết kiệm đúng một nửa thời gian bus.</strong> Song công: <strong>8</strong> chu kỳ SCLK cho một byte đi <strong>và</strong>
+một byte về. Bán song công (gửi xong rồi nhận): <strong>16</strong> chu kỳ SCLK. Mô hình chuẩn Python ghi
+nhận đúng tỉ lệ này: <code>test_full_duplex_time</code> khẳng định <code>8 &lt; 16</code>.</p>
+<p>Với số liệu thật của H03 (<code>HALF_CYCLES = 4</code>): <strong>66</strong> chu kỳ clock/giao dịch song công so với
+<strong>≈130</strong> nếu bán song công. Và với một thiết bị <strong>đeo tay</strong>, thời gian bus ngắn hơn ⟹ thời
+gian bật mạch ngắn hơn ⟹ <strong>tốn ít năng lượng hơn cho mỗi lần đọc cảm biến</strong>.</p>
+<p>Chi phí của song công: <strong>+8 flip-flop</strong> (<code>rx_shift</code> riêng) nếu không dùng chung thanh ghi.</p>
+<h2 id="8-tra-loi-cau-phan-tich-rieng-charter-muc-9">8. Trả lời câu phân tích riêng (Charter mục 9)</h2>
+<blockquote>
+<p><em>"SPI mode 0 quy định dữ liệu đổi ở sườn xuống và lấy mẫu ở sườn lên. Chứng minh thiết kế
+của mình làm đúng bằng waveform có chú thích — nêu rõ khoảng thiết lập (setup) mà bên tớ
+được hưởng."</em></p>
+</blockquote>
+<h3 id="chung-minh-waveform-day-du-03-architecture-timing-diagram-md-1-5">Chứng minh (waveform đầy đủ: <code>03_ARCHITECTURE/timing_diagram.md</code> §1, §5)</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Khẳng định</th>
+<th>Bằng chứng trên waveform</th>
+<th>Bằng chứng trong RTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOSI <strong>chỉ</strong> đổi ở sườn <strong>xuống</strong></td>
+<td><code>mosi</code> đổi tại <code>E6, E10, E14, E18, E22, E26, E30</code> — đúng 7 sườn xuống đầu; <strong>không</strong> đổi tại <code>E4, E8, …, E32</code></td>
+<td><code>mosi &lt;= tx_shift[6]</code> trong nhánh <code>else</code> (<code>sclk == 1</code>), dòng 87</td>
+</tr>
+<tr>
+<td>MISO <strong>chỉ</strong> lấy mẫu ở sườn <strong>lên</strong></td>
+<td><code>rx_shift</code> đổi tại <code>E4, E8, …, E32</code> — đúng 8 sườn lên</td>
+<td><code>rx_shift &lt;= {…,miso}</code> trong nhánh <code>sclk == 1'b0</code>, dòng 74</td>
+</tr>
+<tr>
+<td>Bit đầu có mặt <strong>trước</strong> sườn lên #1</td>
+<td><code>mosi = b7 = 1</code> từ <code>E2</code>; sườn lên #1 tại <code>E4</code></td>
+<td>dòng 56 + 60</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="khoang-setup-ma-ben-to-duoc-huong">Khoảng setup mà bên tớ được hưởng</h3>
+<pre><code>   khoảng setup = HALF_CYCLES × T_clk = NỬA chu kỳ SCLK
+</code></pre>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th style="text-align: right;"><code>HALF_CYCLES</code></th>
+<th style="text-align: right;">Khoảng setup</th>
+<th style="text-align: right;">Chu kỳ SCLK</th>
+<th style="text-align: right;"><code>f_sclk</code> (<code>T_clk</code> giả định 10 ns)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">2 (testbench)</td>
+<td style="text-align: right;"><strong>20 ns</strong></td>
+<td style="text-align: right;">40 ns</td>
+<td style="text-align: right;">25 MHz</td>
+</tr>
+<tr>
+<td style="text-align: right;"><strong>4 (đã tổng hợp)</strong></td>
+<td style="text-align: right;"><strong>40 ns</strong></td>
+<td style="text-align: right;">80 ns</td>
+<td style="text-align: right;">12,5 MHz</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">80 ns</td>
+<td style="text-align: right;">160 ns</td>
+<td style="text-align: right;">6,25 MHz</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Đặc tính đáng khen nhất của thiết kế:</strong> khoảng setup <strong>đồng đều cho MỌI bit, kể cả bit
+đầu tiên</strong> (INV-11). Nhiều hiện thực sai làm bit đầu hẹp hơn vì chúng đặt bit đầu muộn hơn.
+Ở đây <code>mosi</code> được đặt tại <code>E(s)</code> và sườn lên #1 ở <code>E(s + HALF_CYCLES)</code> — đúng bằng khoảng
+cách giữa mọi cặp sườn xuống/lên kế tiếp.</p>
+</blockquote>
+<p>⚠️ <code>T_clk = 10 ns</code> là <strong>giả định</strong> của <code>design.sdc</code>, <strong>không</strong> phải khẳng định H03 chạy được
+ở 100 MHz. Các giá trị ns ở trên là <strong>tỉ lệ theo chu kỳ clock</strong>.</p>
+<p><strong>Chiều ngược lại (MISO → H03)</strong> cũng được nửa chu kỳ SCLK, nhưng phải trừ độ trễ vòng
+(<code>t_clk→Q</code> của tớ + 2× độ trễ pad/dây). H03 <strong>không có bộ đồng bộ</strong> trên <code>miso</code>, nên nếu tổng
+đó vượt <code>HALF_CYCLES × T_clk</code> thì lấy mẫu sẽ sai. ⬜ <strong>Chưa phân tích định lượng.</strong></p>
+<h2 id="9-nhung-cho-sinh-vien-hay-sai-va-cach-phat-hien">9. Những chỗ sinh viên hay sai và cách phát hiện</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>Sai lầm</th>
+<th>Hậu quả</th>
+<th><strong>Phát hiện bằng bằng chứng nào</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td><strong>Coi "mô phỏng PASS" là đã kiểm chứng xong</strong></td>
+<td>Bỏ lọt: <code>rx_data</code> sai, <code>mosi</code> chưa kiểm, FSM có thể kẹt</td>
+<td>Mở <code>h03_spi_master_tb.sv</code> và <strong>đếm số <code>assert</code></strong>: chỉ có 3, không cái nào chạm <code>rx_data</code> hay <code>mosi</code>. Mở <code>test_matrix.csv</code> đối chiếu Charter mục 8.</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>Lái MISO <strong>tại</strong> sườn lên trong mô hình chip tớ</td>
+<td><code>rx_data</code> trễ <strong>một bit</strong> (<code>0x1E</code> thay vì <code>0x3C</code>), nhưng <strong>không ai thấy</strong></td>
+<td>Thêm <code>assert(rx_data == 8'h3C)</code> ⟹ FAIL ngay. Rồi truy vết: chip tớ mode 0 phải lái MISO ở sườn <strong>xuống</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>Thấy <code>assert(rx_data)</code> FAIL rồi <strong>sửa DUT</strong></td>
+<td>Phá hỏng một thiết kế đang đúng</td>
+<td>Đối chiếu RTL với định nghĩa mode 0: <code>rx_shift</code> nằm trong nhánh <code>sclk == 1'b0</code> ⟹ lấy mẫu ở sườn <strong>lên</strong> ⟹ <strong>DUT đúng</strong>. Lỗi ở testbench.</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>Đặt <code>edge_count == 8</code> ở nhánh sườn <strong>lên</strong></td>
+<td><code>sclk</code> <strong>kẹt cao</strong> khi nhả CS ⟹ vi phạm CPOL = 0</td>
+<td>Waveform: kiểm <code>sclk == 0</code> <strong>ngay trước</strong> khi <code>cs_n</code> lên. Testbench hiện tại <strong>không</strong> kiểm điều này.</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>Đưa bit đầu ra MOSI ở sườn SCLK đầu tiên</td>
+<td>Thành <strong>mode 1</strong>; chip tớ đọc lệch một bit</td>
+<td>Waveform: <code>mosi</code> phải hợp lệ <strong>trước</strong> <code>E4</code> (sườn lên #1). Ở đây nó hợp lệ từ <code>E2</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>Viết <code>mosi &lt;= tx_shift[7]</code> thay vì <code>[6]</code></td>
+<td>Mỗi bit gửi <strong>hai lần</strong></td>
+<td><code>tx_sequence(0x96,True)</code> của mô hình chuẩn cho <code>[1,0,0,1,0,1,1,0]</code>; waveform sẽ cho <code>b7,b7,b6,b6,…</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td><strong>Quên <code>default</code> cho mã trạng thái thừa</strong></td>
+<td><strong>Chính là lỗi của đề này.</strong> FSM kẹt vĩnh viễn, <code>cs_n</code> có thể kẹt <code>0</code></td>
+<td><strong>Đếm mã</strong>: <code>enum logic [1:0]</code> = 4 mã, dùng 3 ⟹ thừa 1 ⟹ <strong>phải có <code>default</code></strong>. Mô phỏng chức năng <strong>không thể</strong> phát hiện; chỉ fault injection (ca CC-7) mới phủ được.</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>Dùng <code>sclk</code> làm clock cho logic bên trong</td>
+<td>Tạo <strong>clock domain thứ hai</strong>, cần CTS riêng, dễ sinh glitch</td>
+<td>Kiểm netlist: chỉ được có <strong>một</strong> net vào chân <code>CLK</code> của mọi <code>dfxtp_1</code>. RTL này làm đúng — <code>sclk</code> chỉ là <strong>dữ liệu</strong>, mọi thứ chạy theo <code>clk</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td>Tin rằng <code>tx_shift</code> có 8 flip-flop</td>
+<td>Đếm sai FF, lý giải sai diện tích</td>
+<td><code>netlist.v</code> chỉ có <code>\tx_shift[0..6]</code>. 37 khai báo → <strong>36</strong> <code>dfxtp_1</code>. Và bit đó <strong>sẽ sống lại</strong> nếu <code>MSB_FIRST = 0</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td>Bỏ qua <code>miso</code> không có bộ đồng bộ</td>
+<td>Lấy mẫu sai khi độ trễ vòng lớn</td>
+<td>So RTL của H02 (<strong>có</strong> <code>rx_meta</code>/<code>rx_sync</code>) với H03 (<strong>không có</strong>). Rồi tính ngân sách độ trễ vòng của bo mạch.</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td>Báo "H03 chạy được ở 100 MHz" hoặc "<code>f_sclk</code> = 12,5 MHz"</td>
+<td>Phát biểu vượt mức</td>
+<td><code>02_SPECIFICATION/timing.md</code> §3 — bảng bốn giả định. <code>T_clk = 10 ns</code> là giả định phân tích.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="10-cau-hoi-mentor-nen-dat-khi-bao-ve">10. Câu hỏi mentor nên đặt khi bảo vệ</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>Câu hỏi</th>
+<th>Đáp án mong đợi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>Chỉ <strong>hai</strong> mốc trên waveform chứng minh CS bao trọn 8 xung.</td>
+<td>CS xuống tại <code>E2</code> (25 ns), sườn lên #1 tại <code>E4</code> (45 ns) ⟹ trước 2 chu kỳ. Sườn xuống #8 tại <code>E34</code> (345 ns), CS lên tại <code>E35</code> (355 ns) ⟹ sau 1 chu kỳ.</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>Mode 0 lấy mẫu MISO ở sườn nào? Mạch em làm đúng chưa?</td>
+<td>Sườn <strong>lên</strong>. Đúng — <code>rx_shift</code> nằm trong nhánh <code>sclk == 1'b0</code>, và trên waveform nó đổi tại đúng 8 sườn lên.</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>Khoảng setup của bên tớ là bao nhiêu, và bit đầu có hẹp hơn không?</td>
+<td><code>HALF_CYCLES × T_clk</code> = nửa chu kỳ SCLK. <strong>Bit đầu KHÔNG hẹp hơn</strong> — <code>mosi</code> đặt tại <code>E(s)</code>, sườn lên #1 tại <code>E(s+HALF_CYCLES)</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>Mô phỏng PASS. Vậy <code>rx_data</code> đúng chưa?</td>
+<td><strong>Chưa biết</strong> — testbench <strong>không bao giờ kiểm <code>rx_data</code></strong>. Và mô hình chip tớ của nó lái MISO <strong>sai sườn</strong>, nên <code>rx_data</code> thật sẽ là <code>0x1E</code> chứ không phải <code>0x3C</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>Nếu thêm <code>assert(rx_data == 8'h3C)</code> và nó FAIL, em sửa ở đâu?</td>
+<td><strong>Sửa testbench</strong>, không sửa DUT. Chip tớ mode 0 phải lái MISO ở sườn <strong>xuống</strong>, không phải sườn lên.</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>Vì sao <code>edge_count == 8</code> được kiểm ở nhánh sườn <strong>xuống</strong>?</td>
+<td>Để sườn xuống #8 <strong>vẫn được phát</strong>, hoàn tất chu kỳ SCLK thứ 8 và đưa <code>sclk</code> về <code>0</code> trước khi nhả CS. Nếu kiểm ở sườn lên, <code>sclk</code> kẹt cao ⟹ vi phạm CPOL = 0.</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>FSM có trạng thái bất hợp lệ không? So với H01 và H02?</td>
+<td><strong>Có, và RTL KHÔNG xử lý.</strong> 3 trạng thái / 4 mã ⟹ thừa <code>2'b11</code>, mà <code>case</code> <strong>không có <code>default</code></strong> ⟹ kẹt vĩnh viễn. H01: 4/4 mã, không cần <code>default</code> ✅. H02: 7/8 mã, <strong>có</strong> <code>default</code> ✅. <strong>Chỉ H03 sai.</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>Vì sao mô phỏng không phát hiện lỗi đó?</td>
+<td><code>2'b11</code> <strong>không có đường tới</strong> từ trạng thái hợp lệ. Chỉ fault injection (ép <code>state</code>) mới phủ được. <strong>Mô phỏng chức năng chỉ chứng minh các đường có thể đi tới.</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td>Vì sao netlist có 36 flip-flop mà RTL khai báo 37?</td>
+<td><code>tx_shift[7]</code> <strong>không bao giờ được đọc</strong> (bit MSB lấy thẳng từ <code>tx_data[7]</code>, các bit sau từ <code>tx_shift[6]</code>) ⟹ Yosys xoá. Nó <strong>sẽ sống lại</strong> nếu đổi <code>MSB_FIRST = 0</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td>Song công tiết kiệm được gì? Tốn gì?</td>
+<td>Tiết kiệm <strong>một nửa</strong> thời gian bus: 8 chu kỳ SCLK thay vì 16. Tốn <strong>+8 FF</strong> (<code>rx_shift</code> riêng) — trừ khi dùng chung một thanh ghi dịch (tiết kiệm 7 FF nhưng giấu mất bản chất).</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td>H03 có 36 FF — nhiều nhất nhóm H — nhưng chỉ 156 cell, ít hơn H02 (182). Vì sao?</td>
+<td>Cổng tổ hợp/FF của H03 là <strong>3,33</strong>, thấp nhất (H02: 4,87). SPI <strong>có dây clock chung</strong> ⟹ không cần khôi phục nhịp ⟹ không cần bộ đếm rộng hay cây giải mã lớn. FSM chỉ 3 trạng thái.</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td><code>miso</code> có cần bộ đồng bộ không?</td>
+<td>H02 <strong>có</strong> cho <code>rx_async</code>; H03 <strong>không có</strong> cho <code>miso</code>. Lý lẽ bênh vực: <code>miso</code> do tớ lái theo SCLK mà chính H03 phát. Lý lẽ phản bác: <strong>độ trễ vòng bo mạch không bị STA của H03 ràng buộc</strong>. ⬜ Chưa phân tích định lượng.</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td>Rủi ro vật lý lớn nhất của H03 là gì?</td>
+<td><strong>Skew giữa ba pad</strong> <code>sclk</code>/<code>mosi</code>/<code>cs_n</code>. Nếu <code>mosi</code> tới muộn hơn <code>sclk</code>, setup của tớ bị ăn mòn; một glitch trên <code>sclk</code> bị đếm là xung thừa. Chỉ kiểm được ở <strong>L5 (post-layout + SDF)</strong> — chưa chạy.</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td>H03 dùng được với cảm biến cần "1 byte địa chỉ + N byte dữ liệu" không?</td>
+<td><strong>Không</strong> — H03 nhả CS sau <strong>mỗi</strong> byte. Giữ CS qua nhiều byte nằm <strong>ngoài phạm vi</strong> Charter mục 3. Phải ghi vào <code>limitations.md</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="11-gioi-han-da-chung-minh-duoc-gi-chua-chung-minh-duoc-gi">11. Giới hạn: đã chứng minh được gì, chưa chứng minh được gì</h2>
+<h3 id="da-chung-minh">✅ Đã chứng minh</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Điều</th>
+<th>Bằng chứng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTL tổng hợp được sang <code>sky130_fd_sc_hd</code></td>
+<td><code>yosys.log</code> · <code>synth_stat.txt</code></td>
+</tr>
+<tr>
+<td>Cấu trúc RTL sinh <strong>đúng</strong> phần cứng dự kiến, kể cả bit bị xoá</td>
+<td>36 FF phân rã khớp <code>netlist.v</code>; <code>tx_shift[7]</code> mất <strong>vì lý do chứng minh được</strong></td>
+</tr>
+<tr>
+<td><strong>Đúng 8 sườn lên SCLK</strong></td>
+<td><code>assert(rise_count == 8)</code> PASS</td>
+</tr>
+<tr>
+<td><strong>≥ 8 sườn xuống SCLK</strong></td>
+<td><code>assert(fall_count &gt;= 8)</code> PASS</td>
+</tr>
+<tr>
+<td><strong>CS được nhả ở cuối giao dịch</strong></td>
+<td><code>assert(cs_n == 1'b1)</code> PASS</td>
+</tr>
+<tr>
+<td><strong>Số chu kỳ giao dịch khớp phân tích FSM</strong></td>
+<td>Dự đoán <code>16·HC + 1 = 33</code> ck ⟹ <code>t = 355 ns</code>; <code>simulation.log</code> ghi <code>$finish called at 355</code></td>
+</tr>
+<tr>
+<td>Mạch đúng phân loại <strong>Tuần tự</strong></td>
+<td>36 FF &gt; 0; công suất tuần tự 94,0 %</td>
+</tr>
+<tr>
+<td>Ràng buộc timing <strong>giả định</strong> 10 ns được thoả</td>
+<td>slack +8,02 ns, WNS/TNS = 0,00</td>
+</tr>
+<tr>
+<td>Thuật toán SPI mode 0 (không phải RTL) đúng</td>
+<td><code>reference_model.py</code> PASS 5000 ca</td>
+</tr>
+<tr>
+<td>MOSI phát đúng chuỗi (<strong>bằng đọc mã</strong>, không bằng mô phỏng)</td>
+<td><code>datapath.md</code> §4, truy vết 8 bit khớp <code>tx_sequence(0x96,True)</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="chua-chung-minh">❌ Chưa chứng minh</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Điều</th>
+<th>Vì sao</th>
+<th>Cần gì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>rx_data</code> đúng</strong></td>
+<td>Testbench <strong>không kiểm</strong></td>
+<td>Ca <strong>CC-1</strong>: sửa mô hình chip tớ (lái MISO ở sườn <strong>xuống</strong>) + thêm <code>assert(rx_data == slave_bits)</code></td>
+</tr>
+<tr>
+<td><strong><code>mosi</code> phát đúng byte</strong></td>
+<td>Testbench <strong>không kiểm</strong></td>
+<td>Ca <strong>CC-2</strong>: thu 8 mẫu MOSI tại 8 sườn lên</td>
+</tr>
+<tr>
+<td><strong>FSM an toàn với mã trạng thái thừa</strong></td>
+<td><code>2'b11</code> không có đường tới ⟹ mô phỏng mù</td>
+<td>Bản vá <code>fsm.md</code> §5.4 + ca <strong>CC-7</strong> (fault injection)</td>
+</tr>
+<tr>
+<td>CS xuống <strong>trước</strong> sườn lên #1</td>
+<td>Testbench chỉ kiểm CS lúc <strong>cuối</strong></td>
+<td>Ca kiểm mốc 1</td>
+</tr>
+<tr>
+<td><code>MSB_FIRST = 0</code> hoạt động</td>
+<td>Chưa từng mô phỏng</td>
+<td>Ca <strong>CC-3</strong></td>
+</tr>
+<tr>
+<td><code>HALF_CYCLES = 1</code> hoạt động</td>
+<td>Nhánh chưa từng chạy</td>
+<td>Ca <strong>CC-4</strong></td>
+</tr>
+<tr>
+<td>Ba ca byte của Charter mục 8 (<code>0x00</code>, <code>0xFF</code>, <code>0xA5</code>)</td>
+<td>Chưa có</td>
+<td>Bổ sung testbench</td>
+</tr>
+<tr>
+<td><strong>Ngân sách độ trễ vòng MISO</strong></td>
+<td><code>miso</code> không qua bộ đồng bộ</td>
+<td>Số liệu bo mạch đích, hoặc thêm 1–2 tầng đồng bộ + giảm <code>f_sclk</code></td>
+</tr>
+<tr>
+<td><strong><code>t_CS_hold</code> đủ cho chip tớ</strong></td>
+<td>Biên này là hằng số 1 chu kỳ clock, không chỉnh được bằng tham số</td>
+<td>Datasheet cảm biến đích</td>
+</tr>
+<tr>
+<td><strong>Skew giữa ba pad <code>sclk</code>/<code>mosi</code>/<code>cs_n</code></strong></td>
+<td>Chưa P&amp;R</td>
+<td>L5: post-layout + SDF</td>
+</tr>
+<tr>
+<td>Hành vi trên netlist / tần số thật</td>
+<td>L4, L5, P&amp;R chưa chạy</td>
+<td>Gate-level + SDF + STA đa góc</td>
+</tr>
+<tr>
+<td>Diện tích/công suất ở <code>HALF_CYCLES</code> khác</td>
+<td>Chỉ tổng hợp một cấu hình</td>
+<td>Chạy lại <code>02_run_synth.sh</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ngoai-pham-vi-charter-muc-3-khong-phai-chua-lam">⬛ Ngoài phạm vi (Charter mục 3) — <strong>không phải "chưa làm"</strong></h3>
+<p>Mode 1 / 2 / 3 · nhiều tớ · DMA · truyền nhiều byte (kể cả <strong>giữ CS qua nhiều byte</strong>) ·
+thiết kế analog mức transistor · tự làm physical design · ASIC sign-off · tape-out · chế tạo
+và kiểm tra sau chế tạo.</p>
+<blockquote>
+<p>Hồ sơ này <strong>không</strong> đưa ra bất kỳ khẳng định nào về sign-off, tape-out, chế tạo, hay tần số
+hoạt động trên silicon.</p>
+<h3 id="va-mot-canh-bao-cuoi-quan-trong-nhat-cua-de-h03">⚠️ Và một cảnh báo cuối, quan trọng nhất của đề H03:</h3>
+<p><strong>Mô phỏng PASS ở đây chứng minh ÍT hơn nhiều so với vẻ ngoài của nó.</strong> Ba <code>assert</code> kiểm
+được số sườn SCLK và trạng thái cuối của CS; chúng <strong>không</strong> chạm tới <code>rx_data</code>, <code>mosi</code>, hay
+tính an toàn của FSM. Một mô phỏng PASS với độ phủ chức năng thấp có thể <strong>nguy hiểm hơn</strong>
+một mô phỏng FAIL, vì nó tạo ra niềm tin sai.</p>
+</blockquote>
+<hr>
+<p><em>Phiên bản: v1.0 · Ngày: 2026-09-24</em></p>
+</main>
+<footer class="doc">
+  Tài liệu sinh từ <code>implementation-notes_H03.md</code>.
+  Mọi số liệu đều kèm công cụ, phiên bản và lệnh tái lập trong
+  <code>07_TRACEABILITY/evidence_index.md</code>.
+</footer>
+</div>
+<script>
+(function(){
+  var b=document.createElement('button');
+  b.className='themebtn'; b.type='button';
+  function lbl(){var t=document.documentElement.getAttribute('data-theme');
+    return t==='dark'?'Nen sang':(t==='light'?'Nen toi':'Doi nen');}
+  b.textContent=lbl();
+  try{var s=localStorage.getItem('rtl2gds-theme'); if(s)document.documentElement.setAttribute('data-theme',s);}catch(e){}
+  b.textContent=lbl();
+  b.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    var mq=window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next=cur?(cur==='dark'?'light':'dark'):(mq?'light':'dark');
+    document.documentElement.setAttribute('data-theme',next);
+    try{localStorage.setItem('rtl2gds-theme',next);}catch(e){}
+    b.textContent=lbl();
+  });
+  document.body.appendChild(b);
+})();
+</script>
+</body>
+</html>
