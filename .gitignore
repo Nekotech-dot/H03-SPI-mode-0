@@ -1,0 +1,19 @@
+
+# H03 generated simulation files
+*.vcd
+*.vvp
+*.log
+
+# LibreLane generated output
+04_IMPLEMENTATION/scripts/runs/
+06_GDSII/
+
+# Generated evidence output
+05_VERIFICATION/evidence/evidence_RUN_*.txt
+
+# Python/cache/temp
+__pycache__/
+*.pyc
+*~
+*.swp
+.DS_Store
